@@ -41,10 +41,10 @@
     <string name="dev_num">243892390948</string>
     <string name="dev_mail">contact.jkantech@gmail.com</string>
     <string name="notemodeletitre">Welcome to use Jado Note!</string>
-    <string name="notemodeleText">Jado Notes is an essential assistant for you to record your mind and make your life organized. \n \n Jado Notes allows you to create and save your notes quickly.You can easy to add notes,and sort your notes by labels or colors and search it later. \n \n But also you could archive your notes,share with your friends and family. \n Last But  you could archive your notes,share with your friends and family. \n \nIf you have any questions or advices, please feel free to contact me! I will do mine best to develop Quick Notes!Hope you can enjoy the better and safer recording in your life!</string>
+    <string name="notemodeleText">Jado Notes is an essential assistant for you to record your mind and make your life organized. \n \n Jado Notes allows you to create and save your notes quickly.You can easy to add notes,and sort your notes by labels or colors and search it later. \n \n But also you could archive your notes,share with your friends and family. \n Last But  you could archive your notes,share with your friends and family. \n \nIf you have any questions or advices, please feel free to contact me! I will do mine best to develop Jado Notes!Hope you can enjoy the better and safer recording in your life!</string>
     <string name="exit_msg">Sur to exit</string>
     <string name="action_oui">Yes</string>
-    <string name="app_version">Version: 1.2.3</string>
+    <string name="app_version">Version: 1.2.4</string>
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

@@ -109,6 +109,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         setContentView(R.layout.activity_note_detail)
         toolbar.setTitle(getString(R.string.note_detail))
 
+
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -136,6 +137,8 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         notestyle.visibility= GONE
         Notedetailcolor=findViewById(R.id.note_detail_color)
         // Notedetailcolor.setBackgroundColor(resources.getColor(R.color.aboutcolor))
+
+
         Notedetailcolor.setBackgroundColor(Color.parseColor(note.color))
 
         /*
@@ -157,6 +160,8 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         EdittextView.setText(textView.text)
         Editdate.text=note.editdate
         Createdate.text=note.createdate
+
+
 
         //Initialisation des couleurs
         colorOne = findViewById(R.id._1)
