@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#C2185B</color>
+    <color name="teal_700">#7B1FA2</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="notecolor">#ffdddd</color>
+
+    <color name="colorPrimary">#008000</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorAccent">#25D366</color>
+
+    <color name="mainTexte">#2D313D</color>
+    <color name="mainText">#000000</color>
+    <color name="textAlt">#8D8F97</color>
+    <color name="dayNight">#2D313D</color>
+    <color name="dayNight1">#8D8F97</color>
+
+    <color name="mainBackground">#ffffff</color>
+
+
+    <color name="bright_pink">#FF007F</color>
+    <color name="orange">#FF7F00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="spring_green">#00FF7F</color>
+    <color name="red">#FF0000</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="azure">#007FFF</color>
+    <color name="blue">#0000FF</color>
+    <color name="violet">#7F00FF</color>
+    <color name="magenta">#FF00FF</color>
+    <color name="green">#00FF00</color>
+    <color name="aboutcolor">#7C4DFF</color>
+
+
+    <color name="button_green">#00FF7F</color>
+    <color name="button_text_color">#000000</color>
+    <color name="button_red">#FF0000</color>
+
+    <color name="dark_red">#7C0202</color>
+
+
+    <color name="one">#FFEBEE</color>
+    <color name="two">#FF8A80</color>
+    <color name="three">#EA80FC</color>
+    <color name="five">#FFF59D</color>
+    <color name="four">#97EC97</color>
+    <color name="theme1">#4B0082</color>
+    <color name="theme1Accent">#4B0082</color>
+    <color name="theme2">#E83F23</color>
+    <color name="theme2Accent">#FF4F00</color>
+    <color name="theme3">#722F37</color>
+    <color name="theme3Accent">#722F37</color>
+
+
+    <color name="six">#84FFFF</color>
+
+    <color name="seven">#B3E5FC</color>
+
+    <color name="eight">#7E7ECD</color>
+    <color name="drawer_color">#B3A0D0</color>
+</resources>

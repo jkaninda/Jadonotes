@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_add_note"
+            android:icon="@drawable/ic_baseline_create"
+            android:title="@string/add_note_title" />
+        <item
+            android:id="@+id/all_note"
+            android:icon="@drawable/ic_baseline_library_books"
+            android:title="@string/all_notes" />
+
+    </group>
+
+    <group
+        android:id="@+id/drawer_item"
+        android:checkableBehavior="none">
+
+    <item
+                android:id="@+id/nav_backup"
+                android:icon="@drawable/ic_baseline_backup"
+                android:title="@string/backup" />
+
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_baseline_settings"
+                android:title="@string/action_settings" />
+
+
+    </group>
+    <group
+        android:id="@+id/drawer_ite"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/ic_baseline_share"
+            android:title="@string/nav_share"
+            />
+
+        <item android:id="@+id/nav_about"
+            android:title="@string/a_propos"
+            android:icon="@drawable/ic_baseline_code"
+
+            />
+
+        <item
+            android:id="@+id/versionapp_nav"
+            android:icon="@drawable/ic_baseline_info"
+            android:title="@string/app_version"
+            />
+    </group>
+
+
+</menu>

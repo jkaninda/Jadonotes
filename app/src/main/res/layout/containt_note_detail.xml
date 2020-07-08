@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/note_detail_color"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="50dp"
+    android:background="@color/notecolor"
+    tools:context=".ui.views.NoteDetailActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="30dp">
+            <EditText
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:textSize="18sp"
+                android:layout_marginStart="10dp"
+                android:background="@null"
+                android:maxLength="50"
+                android:maxLines="4"
+                android:hint="Pas de titre"
+                android:visibility="gone"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                />
+            <EditText
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="00dp"
+                android:background="@null"
+                android:inputType="textMultiLine"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                android:maxLength="2000"
+                android:textColorHint="@color/black"
+                android:hint="Contenu du note" />
+            />
+            <TextView
+                android:id="@+id/edit_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textSize="22sp"
+                android:onClick="Modifier"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+
+
+                android:hint="Pas de titre"
+                android:autofillHints="" />
+
+            <TextView
+                android:id="@+id/edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textSize="19sp"
+                android:layout_marginStart="10dp"
+                android:layout_gravity="center"
+                android:textColor="@color/black"
+                android:onClick="Modifier"
+                android:layout_marginEnd="10dp"
+                android:textColorHint="@color/black"
+
+                android:hint="Texte de la note"
+                android:autofillHints="" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/edit_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="02 07 2020"
+                android:fontFamily="@font/itim"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#232323" />
+            <TextView
+                android:id="@+id/create_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="10sp"
+                android:text="02 07 2020"
+                android:fontFamily="@font/itim"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#232323" />
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

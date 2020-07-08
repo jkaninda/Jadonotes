@@ -1,0 +1,74 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.JadoNotes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/dayNight</item>
+        <item name="colorPrimaryVariant">@color/dayNight</item>
+        <item name="colorOnPrimary">@color/dayNight</item>
+        <!-- Secondary brand color. -->
+
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/dayNight</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="Theme.JadoNotes.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.JadoNotes.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.JadoNotes.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+    <style name="Theme1" parent="Theme.JadoNotes.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/dayNight</item>
+        <item name="colorPrimaryVariant">@color/dayNight</item>
+        <item name="colorOnPrimary">@color/dayNight</item>
+        <!-- Secondary brand color. -->
+
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/theme1</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/dayNight</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+    </style>
+
+
+    <style name="Theme2" parent="Theme.JadoNotes.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/dayNight</item>
+        <item name="colorPrimaryVariant">@color/dayNight</item>
+        <item name="colorOnPrimary">@color/dayNight</item>
+        <!-- Secondary brand color. -->
+
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/theme2</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/dayNight</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+    </style>
+
+
+    <style name="Theme3" parent="Theme.JadoNotes.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/dayNight</item>
+        <item name="colorPrimaryVariant">@color/dayNight</item>
+        <item name="colorOnPrimary">@color/dayNight</item>
+        <!-- Secondary brand color. -->
+
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/theme3</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorAccent">@color/dayNight</item>
+        <item name="android:windowBackground">@color/colorPrimaryDark</item>
+    </style>
+
+</resources>
