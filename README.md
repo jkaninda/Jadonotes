@@ -1,7 +1,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 
-![Logo]()
+![Logo](https://github.com/jkanTech/Jadonotes/blob/master/app/src/main/ic_launcher-playstore.png)
 # Jado Notes
 Une application de Notes 
 
