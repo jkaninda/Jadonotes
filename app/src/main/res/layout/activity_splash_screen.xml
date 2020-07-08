@@ -43,7 +43,7 @@
         android:id="@+id/dev"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Powerd by jkanTech"
+        android:text="Powered by jkanTech"
         android:layout_alignParentBottom="true"
         android:textSize="14sp"
         android:textColor="@color/white"

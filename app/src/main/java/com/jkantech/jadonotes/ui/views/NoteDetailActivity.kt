@@ -380,17 +380,18 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
                 window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
        setContentView(R.layout.exit_dialog)
        setCancelable(true)
-       show()
         val exit=dialog.findViewById<TextView>(R.id.exit_msg)
-        val confirm_btn=dialog.findViewById<Button>(R.id.confirm_btn)
-        val cancel=dialog.findViewById<Button>(R.id.cancel_btn)
+        val confirm_btn=findViewById<Button>(R.id.confirm_btn)
+        val cancel=findViewById<Button>(R.id.cancel_btn)
         exit.text=getString(R.string.delete_message)
         confirm_btn.setOnClickListener {
             deleteNote()
+            dismiss()
         }
         cancel.setOnClickListener {
-            dialog.dismiss()
+            dismiss()
         }
+            show()
 
 
     }

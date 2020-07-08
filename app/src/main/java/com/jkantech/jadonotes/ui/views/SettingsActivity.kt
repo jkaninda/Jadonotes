@@ -37,9 +37,8 @@ class SettingsActivity : AppCompatActivity() {
                 "ThemePref",
                 Context.MODE_PRIVATE
         )
-
-
         applyStyle()
+
         setContentView(R.layout.activity_settings)
         title=getString(R.string.action_settings)
         setSupportActionBar(toolbar)
@@ -123,7 +122,6 @@ class SettingsActivity : AppCompatActivity() {
                          val rIntent = Intent()
                          rIntent.putExtra(themeKey, 0)
                          setResult(Activity.RESULT_OK, rIntent)
-                         //startActivity(rIntent)
                          val intent = Intent(this, MainActivity::class.java)
                          startActivity(intent)
                          finish()
@@ -241,6 +239,7 @@ class SettingsActivity : AppCompatActivity() {
 
 
     }
+
     override fun finish() {
         super.finish()
         overridePendingTransition(
@@ -248,6 +247,8 @@ class SettingsActivity : AppCompatActivity() {
             R.anim.activity_fade_out_animation
         )
     }
+
+
 }
 
 

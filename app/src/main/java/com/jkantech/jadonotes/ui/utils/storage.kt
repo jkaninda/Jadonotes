@@ -19,7 +19,7 @@ fun persistNote(context: Context, note: Note) : Boolean {
         note.filename = UUID.randomUUID().toString() + ".note"
     }
     Log.i(TAG, "Sauvegarde de note $note")
-    val fileOutput = context.openFileOutput(note.filename, Context.MODE_APPEND)
+    val fileOutput = context.openFileOutput(note.filename, Context.MODE_PRIVATE)
     val outputStream = ObjectOutputStream(fileOutput)
     outputStream.writeObject(note)
 

@@ -79,6 +79,8 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
     @SuppressLint("SetTextI18n")
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        window.allowEnterTransitionOverlap = true
+
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences(
             "ThemePref",
@@ -120,7 +122,7 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         getheure = heures.toString() + ":" + minutes
 
 
-        if (titleView.length()  >= 49) {
+        if (titleView.text.length  >= 49) {
             toast("Vous avez atteind la taille limite , Max 50")
 
         }
@@ -154,11 +156,15 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         fab.setOnClickListener {
             if (notecolor.isVisible) {
                 style_note_fab.setImageDrawable(getDrawable(R.drawable.ic_baseline_color_lens))
+                style_note_fab.backgroundTintList!!.defaultColor
+
                 notecolor.visibility = GONE
 
             } else {
                 notecolor.visibility = VISIBLE
                 style_note_fab.setImageDrawable(getDrawable(R.drawable.ic_baseline_cancel))
+                style_note_fab.backgroundTintList!!.defaultColor
+
 
 
             }

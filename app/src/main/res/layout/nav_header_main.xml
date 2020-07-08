@@ -42,6 +42,6 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:fontFamily="@font/itim"
-        android:text="" />
+        android:text="@string/slogant" />
 
 </LinearLayout>

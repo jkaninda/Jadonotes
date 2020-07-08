@@ -6,8 +6,8 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-    <string name="create_date">Crée le </string>
-    <string name="edit_date">Modifié le </string>
+    <string name="create_date">Crée:</string>
+    <string name="edit_date">Modifié: </string>
     <string name="edit_at"> à </string>
     <string name="edited_on"> at </string>
 
@@ -41,11 +41,15 @@
     <string name="dev_link">jkantech.com</string>
     <string name="dev_num">243892390948</string>
     <string name="dev_mail">contact.jkantech@gmail.com</string>
-    <string name="notemodeletitre">Agenda</string>
-    <string name="notemodeleText">Un agenda est un outil permettant d\'associer des actions à des moments, et d\'organiser ainsi son temps. Il est utilisé afin de pouvoir donner à son utilisateur la possibilité de planifier, de noter son emploi du temps, ses rendez-vous, etc. \n \n Il peut se présenter sous forme matérielle, ou numérique : agenda électronique, assistant personnel (ou PDA), logiciel de calendrier installé sur un ordinateur ou sur un smartphone (téléphone intelligent). \n -Agenda papier \n Dans sa version papier, il regroupe l\'ensemble des jours de l\'année, organisés avec un découpage d\'une page par jour ou par semaine, deux pages par semaine, etc. \n En général, il comporte également des pages ou des sections réservées à d\'autres informations pratiques : carnet d\'adresses, cartes géographiques, bloc-notes, Todo list, etc. \n Il peut avoir de nombreuses formes, mais l\'usage veut qu\'il soit peu encombrant et tienne dans une poche ou dans un sac.\n De plus, il peut être simple et contenir seulement l\'essentiel écrit en stylo ou crayon à mine, ou il peut être décoré avec les autocollants, les marqueurs, des surligneurs de couleurs différents, etc. L\'agenda peut être complètement personnalisé à votre goût.</string>
+    <string name="notemodeletitre">Bienvenue à l\'utilisation de Jado Notes!</string>
+    <string name="notemodeleText">Jado Notes est un assistant essentiel pour enregistrer votre esprit et organiser votre vie. \n \n Jado Notes vous permet de créer et d\'enregistrer rapidement vos notes.Vous pouvez facilement ajouter des notes, trier vos notes par étiquettes ou couleurs et les rechercher plus tard.
+ \n \n Enfin, vous pouvez archiver vos notes, les partager avec vos amis et votre famille. \n \n Si vous avez des questions ou des conseils, n\'hésitez pas à me contacter! Je ferai de mon mieux pour développer des notes rapides! J\'espère que vous pourrez profiter d\'un enregistrement meilleur et plus sûr dans votre vie!
+
+
+    </string>
     <string name="exit_msg">Sure de Quitter</string>
     <string name="action_oui">Oui</string>
-    <string name="app_version">Version: 1.2.1</string>
+    <string name="app_version">Version: 1.2.3</string>
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -76,4 +80,7 @@
     <string name="nav_share">Partager</string>
     <string name="code_source">Code Source</string>
     <string name="help_transl">Nous aider à traduire</string>
+    <string name="nav_rateapp">Noter l\'app</string>
+    <string name="slogant">Rapide et facile à utiliser</string>
+    <string name="share_app_msg">Hey, j\'utilise cette appli et je pense que vous devriez le faire aussi, Obtenez-le ici :</string>
 </resources>

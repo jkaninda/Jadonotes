@@ -138,6 +138,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
         if (notes.isNotEmpty()) {
             loadNotes(this)
+            /*
             notes.remove(
                     Note(
                             getString(R.string.notemodeletitre),
@@ -146,6 +147,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                     )
             )
 
+
+             */
 
         } else {
             //Ajout de note si la liste de note est vide
@@ -226,7 +229,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             return
         }
         when (requestCode) {
-            NoteDetailActivity.REQUEST_EDIT_NOTE -> processEditNoteResult(data)
+            NoteDetailActivity.REQUEST_EDIT_NOTE ->processEditNoteResult(data)
         }
         if (requestCode == REQUEST_STYLE) {
             if (resultCode == Activity.RESULT_OK) {
@@ -294,13 +297,18 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
 
             }
-            R.id.action_edit->{
-
-
-
-
-            }
-
+           R.id.action_contact->{
+               val intent = Intent(
+                   Intent.ACTION_SENDTO, Uri.fromParts(
+                       "mailto", getString(R.string.dev_mail), null
+                   )
+               )
+               val subject: String? = null
+               intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+               val message: String? = null
+               intent.putExtra(Intent.EXTRA_TEXT, message)
+               startActivity(Intent.createChooser(intent, ""))
+           }
 
 
 
@@ -344,11 +352,38 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                 return true
             }
             R.id.nav_share->{
-
-
+                val sendIntent = Intent()
+                sendIntent.action = Intent.ACTION_SEND
+                sendIntent.putExtra(
+                        Intent.EXTRA_TEXT,
+                        getString(R.string.share_app_msg)+" "+ "http://play.google.com/store/apps/details?id=$packageName"
+                )
+                sendIntent.type = "text/plain"
+                startActivity(sendIntent)
                 return true
 
 
+
+            }
+            R.id.nav_rateapp->{
+
+                try {
+                    startActivity(
+                            Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("market://details?id=$packageName")
+                            )
+                    )
+                } catch (e: ActivityNotFoundException) {
+                    startActivity(
+                            Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
+                            )
+                    )
+
+
+                }
 
             }
 
@@ -399,8 +434,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         val note = notes.removeAt(noteIndex)
         com.jkantech.jadonotes.ui.utils.deleteNote(this, note)
         adapter.notifyDataSetChanged()
-
         Snackbar.make(coordinatorLayout, "${note.title}" +" "+getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
+
+
+        // Snackbar.make(coordinatorLayout, "${note.title}" +" "+getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.aboutcolor)).setTextColor(getColor(R.color.white)).show()
+        //setAnchorView(fab).show()
 
     }
 
@@ -516,6 +554,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     companion object {
 
        private val REQUEST_STYLE = 0
+       private val REQUEST_EDIT = 0
 
     }
 

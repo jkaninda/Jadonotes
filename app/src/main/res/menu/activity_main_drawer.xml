@@ -30,10 +30,12 @@
                 android:title="@string/action_settings" />
 
 
-    </group>
-    <group
-        android:id="@+id/drawer_ite"
-        android:checkableBehavior="none">
+
+        <item
+            android:id="@+id/nav_rateapp"
+            android:icon="@drawable/ic_baseline_stars"
+            android:title="@string/nav_rateapp"
+            />
         <item
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_baseline_share"
