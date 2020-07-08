@@ -1,3 +1,6 @@
+# Jado Notes
+Une application de Notes 
+
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 
