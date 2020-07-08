@@ -4,8 +4,13 @@
 
 ![Logo](https://github.com/jkanTech/Jadonotes/blob/master/app/src/main/ic_launcher-playstore.png)
 # Jado Notes
-Une application de Notes 
+Jado Notes is an essential assistant for you to record your mind and make your life organized.
 
+Jado Notes allows you to create and save your notes quickly.You can easy to add notes,and sort your notes by labels or colors and search it later.
+
+Last But  you could archive your notes,share with your friends and family.
+
+ If you have any questions or advices, please feel free to contact me! I will do mine best to develop Quick Notes!Hope you can enjoy the better and safer recording in your life!
 [![Imgur](https://github.com/jkanTech/jadonotes/blob/master/screenshots/Jado.jpg) [![Imgur](https://github.com/jkanTech/jadonotes/blob/master/screenshots/Jado1.jpg) [![Imgur](https://github.com/jkanTech/jadonotes/blob/master/screenshots/Jado2.jpg)
 
 
