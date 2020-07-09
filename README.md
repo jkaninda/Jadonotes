@@ -24,6 +24,7 @@ Last But  you could archive your notes,share with your friends and family.
 * Package name: `com.jkantech.jadonotes`
 * Current version code:  `8`
 * Current version name: `1.2.6`
+* Lang: French and English
 
 Jadot is the old name of my city
 ### Download It
