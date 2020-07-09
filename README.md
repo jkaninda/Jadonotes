@@ -2,7 +2,9 @@
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
 
-![Logo](https://github.com/jkanTech/Jadonotes/blob/master/app/src/main/ic_launcher-playstore.png)
+## Logo
+<img src="https://github.com/jkanTech/Jadonotes/blob/master/app/src/main/ic_launcher-playstore.png" align="left" width="120px"/>
+
 # Jado Notes
 Jado Notes is an essential assistant for you to record your mind and make your life organized.
 
