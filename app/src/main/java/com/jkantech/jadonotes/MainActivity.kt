@@ -8,10 +8,13 @@ import android.content.*
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Handler
 import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -63,6 +66,9 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     private val themeKey = "currentTheme"
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
+    var doubleTap = false
+    private val TAG = "msg"
+
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -219,6 +225,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
          */
 
+
     }
 
 
@@ -286,15 +293,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                 )
             }
             R.id.action_share->{
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(
-                        Intent.EXTRA_TEXT,""
-                )
-                sendIntent.type = "text/plain"
-                startActivity(sendIntent)
-
-
+                shareApp()
 
             }
            R.id.action_contact->{
@@ -352,14 +351,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                 return true
             }
             R.id.nav_share->{
-                val sendIntent = Intent()
-                sendIntent.action = Intent.ACTION_SEND
-                sendIntent.putExtra(
-                        Intent.EXTRA_TEXT,
-                        getString(R.string.share_app_msg)+" "+ "http://play.google.com/store/apps/details?id=$packageName"
-                )
-                sendIntent.type = "text/plain"
-                startActivity(sendIntent)
+                shareApp()
                 return true
 
 
@@ -545,12 +537,32 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
 
     }
-
     override fun onBackPressed() {
-        finish()
+        val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            if (doubleTap) {
+                super.onBackPressed()
+                return
+            }
 
-        super.onBackPressed()
+            this.doubleTap = true
+            toast( getString(R.string.press_again_to_exit))
+
+            Handler().postDelayed({ doubleTap = false }, 2000)
+        }
     }
+    private fun shareApp() {
+        val sendIntent = Intent()
+        sendIntent.action = Intent.ACTION_SEND
+        sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app_msg))
+        sendIntent.type = "text/plain"
+        startActivity(Intent.createChooser(sendIntent, getString(R.string.send_to)))
+    }
+
+
+
     companion object {
 
        private val REQUEST_STYLE = 0

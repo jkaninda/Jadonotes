@@ -120,7 +120,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         editnote = intent.getParcelableExtra<Note>(EXTRA_NOTE)
         editnoteIndex = intent.getIntExtra(EXTRA_NOTE_INDEX, -1)
 
-         sendNote="${note.title} \n \n ${note.text} \n \n by"+getString(R.string.app_name)
+         sendNote="${note.title} \n \n ${note.text} \n \n by"+" "+getString(R.string.app_name)
 
 
 
@@ -232,7 +232,9 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
                         Intent.EXTRA_TEXT, sendNote
                 )
                 sendIntent.type = "text/plain"
-                startActivity(sendIntent)
+               startActivity(Intent.createChooser(sendIntent, getString(R.string.send_to)))
+
+               // startActivity(sendIntent)
                 return true
             }
 

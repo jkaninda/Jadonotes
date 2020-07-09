@@ -10,12 +10,8 @@
         android:id="@+id/card_color"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="10sp"
-        android:layout_marginTop="10sp"
         app:cardBackgroundColor="@color/notecolor"
-        android:layout_marginEnd="10sp"
-        android:layout_marginBottom="10sp"
-        app:cardCornerRadius="10sp">
+        >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,9 +28,8 @@
             android:maxLength="50"
             android:maxLines="4"
             android:hint="@string/note_title"
-            android:textColorHint="@color/black"
-            android:textColor="@color/black"
-           />
+            android:textColorHint="@color/texthint"
+            android:textColor="@color/black"/>
 
 
 
@@ -48,10 +43,10 @@
         android:textSize="20sp"
         android:inputType="textMultiLine"
         android:textColor="@color/black"
-        android:maxLength="2000"
+        android:maxLength="4000"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:textColorHint="@color/black"
+        android:textColorHint="@color/texthint"
         android:fontFamily="@font/open_sans"
         android:hint="@string/note_text" />
         <TextView

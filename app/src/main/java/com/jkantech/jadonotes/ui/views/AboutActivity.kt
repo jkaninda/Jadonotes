@@ -31,7 +31,7 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
         dev_gitub_btn.setOnClickListener(this)
         dev_whatsapp_btn.setOnClickListener(this)
         noterapp.setOnClickListener(this)
-        source_code_btn.setOnClickListener(this)
+      //  source_code_btn.setOnClickListener(this)
         help_translate_btn.setOnClickListener(this)
         val versionCode:Int= BuildConfig.VERSION_CODE
         val versionName:String=BuildConfig.VERSION_NAME
@@ -81,6 +81,7 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
                 whatssap.putExtra("jid", stringBuilder.toString())
                 startActivity(whatssap)
             }
+            /*
             R.id.source_code_btn->{
                 val githublien = Intent(
                     Intent.ACTION_VIEW,
@@ -88,6 +89,8 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
                 )
                 startActivity(githublien)
             }
+
+             */
             R.id.help_translate_btn->{
                 val github = Intent(
                     Intent.ACTION_VIEW,

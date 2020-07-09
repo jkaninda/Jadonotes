@@ -10,6 +10,8 @@
     <string name="edit_date">Modifié: </string>
     <string name="edit_at"> à </string>
     <string name="edited_on"> at </string>
+    <string name="app_version">Version: 1.2.6</string>
+
 
     <plurals name="nb_notes">
         <item quantity="one">note</item>
@@ -32,7 +34,7 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="delete_message">Êtes-vous sûr de supprimer cette note ?</string>
     <string name="action_annuler">Annuler</string>
-    <string name="a_propos">A propos</string>
+    <string name="a_propos">À propos</string>
 
     <string name="feed_back_msg"><![CDATA[En cas de souci ou si vous avez des suggestions a me donner afin d’ajouter d’autres fonctionnalités ; n’hésitez pas a me contacter en précisant votre souhait ou problèmes que vous rencontrez , je serai ravi de recevoir votre Feedback .]]></string>
     <string name="feed_back">Feedback</string>
@@ -49,7 +51,6 @@
     </string>
     <string name="exit_msg">Sure de Quitter</string>
     <string name="action_oui">Oui</string>
-    <string name="app_version">Version: 1.2.4</string>
     <!-- Used in NavigationDrawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -67,7 +68,7 @@
     <string name="note_deleted">Supprimé</string>
     <string name="note_title">Titre</string>
     <string name="note_text">Note</string>
-    <string name="backup">Sauvegarder</string>
+    <string name="backup">Exportation &amp; Sauvegarde</string>
     <string name="theme">Thème</string>
     <string name="apparence">Apparence</string>
     <string name="all_notes">Toutes les notes</string>
@@ -82,5 +83,7 @@
     <string name="help_transl">Nous aider à traduire</string>
     <string name="nav_rateapp">Noter l\'app</string>
     <string name="slogant">Rapide et facile à utiliser</string>
-    <string name="share_app_msg">Hey, j\'utilise cette appli et je pense que vous devriez le faire aussi, Obtenez-le ici :</string>
+    <string name="share_app_msg">Jado Notes \n\nEssayez cette application, c\'est une application géniale pour les tâches quotidiennes. Partagez et évaluez également cette application. \n\nLien de téléchargement: https://play.google.com/store/apps/details?id=com.jkantech.jadonotes</string>
+    <string name="press_again_to_exit">Veuillez cliquer à nouveau pour quitter</string>
+    <string name="send_to">Send to...</string>
 </resources>

@@ -120,9 +120,12 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         edit_date = formatter.format(date).toString()
         create_date = formatter.format(date).toString()
         getheure = heures.toString() + ":" + minutes
+        val taille:Int=titleView.length()
 
 
-        if (titleView.text.length  >= 49) {
+
+
+        if (taille  >= 50) {
             toast("Vous avez atteind la taille limite , Max 50")
 
         }
@@ -178,6 +181,7 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_note_menu, menu)
         return true
@@ -185,14 +189,14 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
+        return when (item.itemId) {
             R.id.action_save -> {
                 saveNote()
-                return true
+                true
             }
 
 
-            else -> return super.onOptionsItemSelected(item)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

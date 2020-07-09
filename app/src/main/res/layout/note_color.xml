@@ -51,7 +51,7 @@
                 android:background="@drawable/round_shape"
                 android:backgroundTint="@color/two"
                 android:backgroundTintMode="screen"
-                />
+                android:contentDescription="TODO" />
 
             <ImageButton
                 android:id="@+id/_3"
@@ -90,6 +90,5 @@
 
         </LinearLayout>
     </HorizontalScrollView>
-
 </RelativeLayout>
 </FrameLayout>

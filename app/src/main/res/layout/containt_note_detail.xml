@@ -33,9 +33,9 @@
                 android:background="@null"
                 android:maxLength="50"
                 android:maxLines="4"
-                android:hint="Pas de titre"
+                android:hint="@string/note_title"
                 android:visibility="gone"
-                android:textColorHint="@color/black"
+                android:textColorHint="@color/texthint"
                 android:textColor="@color/black"
                 />
             <EditText
@@ -47,9 +47,10 @@
                 android:inputType="textMultiLine"
                 android:textColor="@color/black"
                 android:visibility="gone"
-                android:maxLength="2000"
-                android:textColorHint="@color/black"
-                android:hint="Contenu du note" />
+                android:maxLength="4000"
+                android:textColorHint="@color/texthint"
+                android:hint="@string/note_text"
+                />
             />
             <TextView
                 android:id="@+id/edit_title"
@@ -60,10 +61,8 @@
                 android:textSize="22sp"
                 android:onClick="Modifier"
                 android:textColor="@color/black"
-                android:textColorHint="@color/black"
-
-
-                android:hint="Pas de titre"
+                android:textColorHint="@color/texthint"
+                android:hint="@string/note_title"
                 android:autofillHints="" />
 
             <TextView
@@ -77,9 +76,8 @@
                 android:textColor="@color/black"
                 android:onClick="Modifier"
                 android:layout_marginEnd="10dp"
-                android:textColorHint="@color/black"
-
-                android:hint="Texte de la note"
+                android:textColorHint="@color/texthint"
+                android:hint="@string/note_text"
                 android:autofillHints="" />
 
         </LinearLayout>
