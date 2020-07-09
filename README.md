@@ -22,8 +22,8 @@ Last But  you could archive your notes,share with your friends and family.
 
 ## Info
 * Package name: `com.jkantech.jadonotes`
-* Current version code:  `3`
-* Current version name: `1.2.3`
+* Current version code:  `8`
+* Current version name: `1.2.6`
 
 Jado is the name of my city
 
