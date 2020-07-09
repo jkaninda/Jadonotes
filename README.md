@@ -21,6 +21,10 @@ Last But  you could archive your notes,share with your friends and family.
 
 Jado is the name of my city
 
+### Download It
+<a href="https://play.google.com/store/apps/details?id=com.jkantech.jadonotes">
+  <img alt="Android app on Google Play" src="https://developer.android.com/images/brand/en_app_rgb_wo_45.png" />
+</a>
 
 
 
