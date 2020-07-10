@@ -19,7 +19,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
@@ -75,6 +74,8 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
     var appTheme=2
     lateinit var sharedPreferences: SharedPreferences
     private val themeKey = "currentTheme"
+    private val textSize = "currentsize"
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("SetTextI18n")
 
@@ -91,7 +92,7 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
         setContentView(R.layout.add_notes)
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         title = (getString(R.string.add_note_title))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -120,12 +121,12 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         edit_date = formatter.format(date).toString()
         create_date = formatter.format(date).toString()
         getheure = heures.toString() + ":" + minutes
-        val taille:Int=titleView.length()
+        //val taille:Int=t
+
+              applyTextSize()
 
 
-
-
-        if (taille  >= 50) {
+        if (title.length  >= 50) {
             toast("Vous avez atteind la taille limite , Max 50")
 
         }
@@ -194,21 +195,48 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
                 saveNote()
                 true
             }
+            R.id.action_small_text->{
+                titleView.textSize=22f
+                textView.textSize=18f
+                sharedPreferences.edit().putInt(textSize,1).apply()
+
+
+
+                return true
+            }
+            R.id.action_medium_text->{
+                titleView.textSize=27f
+                textView.textSize=22f
+                sharedPreferences.edit().putInt(textSize,2).apply()
+
+                return true
+            }
+            R.id.action_large_text->{
+                titleView.textSize=30f
+                textView.textSize=26f
+                sharedPreferences.edit().putInt(textSize,3).apply()
+                return true
+            }
+
+
 
 
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onSupportNavigateUp(): Boolean {
+        saveNoteAuto()
+        return true
+    }
+
     override fun onBackPressed() {
         saveNoteAuto()
-        // super.onBackPressed()
+        super.onBackPressed()
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun saveNote() {
+    private fun saveNote() {
         note.title = titleView.text.toString()
         note.text = textView.text.toString()
         note.editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
@@ -226,14 +254,13 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
             intent = Intent(ACTION_SAVE)
             intent.putExtra(EXTRA_NOTE, note as Parcelable)
             intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
-            toast(getString(R.string.note_saved))
+            //toast(getString(R.string.note_saved))
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun saveNoteAuto() {
+    private fun saveNoteAuto() {
         note.title = titleView.text.toString()
         note.text = textView.text.toString()
         note.editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
@@ -350,7 +377,32 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
 
     }
-    private fun applyStyle() {
+    private fun applyTextSize() {
+        when (sharedPreferences.getInt(textSize, 1)) {
+
+            1 -> {
+                titleView.textSize = 22f
+                textView.textSize = 18f
+
+            }
+            2 -> {
+                titleView.textSize = 27f
+                textView.textSize = 22f
+
+
+            }
+            3 -> {
+                titleView.textSize = 30f
+                textView.textSize = 26f
+
+            }
+        }
+    }
+
+
+
+
+        private fun applyStyle() {
 
         when (sharedPreferences.getInt(themeKey, 0)) {
 

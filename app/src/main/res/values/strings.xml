@@ -10,25 +10,30 @@
     <string name="edit_date">Modifié: </string>
     <string name="edit_at"> à </string>
     <string name="edited_on"> at </string>
-    <string name="app_version">Version: 1.2.6</string>
+    <string name="app_version">Version: 1.2.7</string>
 
 
     <plurals name="nb_notes">
         <item quantity="one">note</item>
         <item quantity="other">notes</item>
     </plurals>
-<string-array name="theme_mode">
-<item>Clair</item>
-<item>Sombre</item>
-<item>Configuration système</item>
-</string-array>
+    <string-array name="theme_mode">
+        <item>Clair</item>
+        <item>Sombre</item>
+        <item>Configuration système</item>
+    </string-array>
+    <string-array name="span_count">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
     <string-array name="theme_styles">
-<item>Theme 1</item>
-<item>Theme 2</item>
-<item>Theme 3</item>
-<item>Theme 4</item>
-</string-array>
+        <item>Theme 1</item>
+        <item>Theme 2</item>
+        <item>Theme 3</item>
+        <item>Theme 4</item>
+    </string-array>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
@@ -75,7 +80,7 @@
     <string name="save_note">Enregistrer</string>
     <string name="delete_note">Supprimer</string>
     <string name="edit_note">Modifier</string>
-    <string name="share_note">Partager en fichier texte</string>
+    <string name="share_note">Envoyer en fichier texte</string>
     <string name="backup_note_msg">Non disponible</string>
     <string name="img_description">description image</string>
     <string name="nav_share">Partager</string>
@@ -85,5 +90,15 @@
     <string name="slogant">Rapide et facile à utiliser</string>
     <string name="share_app_msg">Jado Notes \n\nEssayez cette application, c\'est une application géniale pour les tâches quotidiennes. Partagez et évaluez également cette application. \n\nLien de téléchargement: https://play.google.com/store/apps/details?id=com.jkantech.jadonotes</string>
     <string name="press_again_to_exit">Veuillez cliquer à nouveau pour quitter</string>
-    <string name="send_to">Send to...</string>
+    <string name="send_to">Envoyer à ...</string>
+    <string name="contact_me">Me conctacter</string>
+    <string name="small_text">Taille par défaut</string>
+    <string name="medium">Taille moyenne</string>
+    <string name="large">Grande taille</string>
+    <string name="send">Envoyer</string>
+    <string name="font_size">Taille de police</string>
+    <string name="send_as_picture">Envoyer comme une image</string>
+    <string name="export_text">Exporter le texte</string>
+    <string name="backup_notes">Sauvegarder les notes</string>
+    <string name="history_backup">Historique de sauveagrde de notes</string>
 </resources>

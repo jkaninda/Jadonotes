@@ -36,15 +36,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.jkantech.jadonotes.ui.views.AddNotesActivity
 import com.jkantech.jadonotes.ui.models.Note
 import com.jkantech.jadonotes.ui.adapters.NoteAdapter
 import com.jkantech.jadonotes.ui.utils.MyPreferences
 import com.jkantech.jadonotes.ui.utils.loadNotes
 import com.jkantech.jadonotes.ui.utils.persistNote
-import com.jkantech.jadonotes.ui.views.AboutActivity
-import com.jkantech.jadonotes.ui.views.NoteDetailActivity
-import com.jkantech.jadonotes.ui.views.SettingsActivity
+import com.jkantech.jadonotes.ui.views.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.text.SimpleDateFormat
@@ -306,7 +303,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                intent.putExtra(Intent.EXTRA_SUBJECT, subject)
                val message: String? = null
                intent.putExtra(Intent.EXTRA_TEXT, message)
-               startActivity(Intent.createChooser(intent, ""))
+               startActivity(Intent.createChooser(intent, getString(R.string.contact_me)))
            }
 
 
@@ -314,12 +311,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         }
         return super.onOptionsItemSelected(item)
     }
-
-
-
-
-
-
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         drawer.closeDrawer(GravityCompat.START)
@@ -339,7 +330,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                         return true
             }
             R.id.nav_backup->{
-                toast(getString(R.string.backup_note_msg))
+                //toast(getString(R.string.backup_note_msg))
+                startActivity(Intent(this,BackupActivity::class.java))
                 return true
             }
             R.id.nav_about->{
@@ -537,6 +529,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
 
     }
+
+
+
+
     override fun onBackPressed() {
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -569,7 +565,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
        private val REQUEST_EDIT = 0
 
     }
+private fun applyRow(){
 
+
+}
 
 
 }

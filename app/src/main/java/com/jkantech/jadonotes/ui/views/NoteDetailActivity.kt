@@ -2,17 +2,20 @@ package com.jkantech.jadonotes.ui.views
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Parcelable
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -20,12 +23,10 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jkantech.jadonotes.R
@@ -34,7 +35,9 @@ import com.jkantech.jadonotes.ui.utils.NoteColorPicker
 import kotlinx.android.synthetic.main.add_notes.*
 import kotlinx.android.synthetic.main.containt_note_detail.*
 import kotlinx.android.synthetic.main.note_style.*
-import java.lang.Double.toHexString
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -67,12 +70,16 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
     lateinit var notestyle: FrameLayout
     lateinit var Notedetailcolor:ScrollView
     lateinit var sendNote:String
+    lateinit var imageView: ImageView
+    lateinit var view: View
 
 
 
 
     private lateinit var CardNote: CardView
     private var idColorNote: Int? = null
+    private val TAG = "msg"
+
 
 
 
@@ -96,6 +103,10 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
     var appTheme=2
     lateinit var sharedPreferences: SharedPreferences
     private val themeKey = "currentTheme"
+    private val textSize = "currentsize"
+
+
+
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -110,7 +121,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         toolbar.setTitle(getString(R.string.note_detail))
 
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -163,6 +174,9 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
 
 
+
+
+
         //Initialisation des couleurs
         colorOne = findViewById(R.id._1)
         colorTwo = findViewById(R.id._2)
@@ -193,6 +207,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
 
         }
+        applyTextSize()
 
 
     }
@@ -208,12 +223,12 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_save -> {
                 saveNote()
-                toast(getString(R.string.note_edited))
+               // toast(getString(R.string.note_edited))
                 return true
             }
 
@@ -237,14 +252,48 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
                // startActivity(sendIntent)
                 return true
             }
-
-
-
+            R.id.action_share_as_picture->{
+                sendImage()
+                return true
+            }
 
                 R.id.action_delete -> {
                 DeleteNoteDialog()
                 return true
             }
+
+            R.id.action_small_text->{
+                titleView.textSize=22f
+                EdittitleView.textSize=22f
+                textView.textSize=18f
+                    EdittextView.textSize=18f
+                sharedPreferences.edit().putInt(textSize,1).apply()
+
+
+
+                return true
+            }
+            R.id.action_medium_text->{
+                titleView.textSize=27f
+                EdittitleView.textSize=27f
+                textView.textSize=22f
+                EdittextView.textSize=22f
+                sharedPreferences.edit().putInt(textSize,2).apply()
+
+                return true
+            }
+            R.id.action_large_text->{
+                titleView.textSize=30f
+                EdittitleView.textSize=30f
+                textView.textSize=26f
+                EdittextView.textSize=26f
+                sharedPreferences.edit().putInt(textSize,3).apply()
+                return true
+            }
+
+
+
+
         }
         return super.onOptionsItemSelected(item)
 
@@ -253,18 +302,26 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
 
 
-    fun saveNote() {
 
-        if (cardColor != null){
-            note.title = titleView.text.toString()
-            note.text = textView.text.toString()
+
+    private fun saveNote() {
+        if (edit_title.text.isEmpty()  && edit_text.text.isEmpty()) {
+            deleteNote()
+            Log.i(TAG, "Note supprimer $note")
+
+
+        }else if (cardColor != null){
+            note.title = edit_title.text.toString()
+            note.text = edit_text.text.toString()
             note.editdate = getString(R.string.edit_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
             //cardColor = "#" + (ContextCompat.getColor(this, colorId!!))
             cardColor = "#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
             note.color = cardColor
         }else {
-            note.title = titleView.text.toString()
-            note.text = textView.text.toString()
+            //note.title = titleView.text.toString()
+            //note.text = textView.text.toString()
+            note.title = edit_title.text.toString()
+            note.text = edit_text.text.toString()
             note.editdate = getString(R.string.edit_date) + " " + create_date + "  " + getString(R.string.edit_at) + " " + getheure
 
         }
@@ -276,19 +333,21 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         setResult(Activity.RESULT_OK, intent)
         finish()
     }
-    fun Editnote() {
-        //note.title = EdittextView.text.toString()
-        // note.text = EdittitleView.toString()
 
 
-        EdittextView.visibility= GONE
-        EdittitleView.visibility= GONE
-        titleView.visibility= VISIBLE
-        textView.visibility= VISIBLE
+    private fun Editnote() {
+       // note.title = EdittextView.text.toString()
+       // note.text = EdittitleView.toString()
+        //EdittitleView=note.text.toString()
+
+        EdittextView.visibility= VISIBLE
+        EdittitleView.visibility= VISIBLE
+
         notestyle.visibility= VISIBLE
 
         //notecolor.visibility= VISIBLE
-
+        titleView.visibility= GONE
+        textView.visibility= GONE
         Editdate.visibility= GONE
         Createdate.visibility= GONE
 
@@ -368,7 +427,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
 
 
-    fun deleteNote() {
+    private fun deleteNote() {
         intent = Intent(ACTION_DELETE)
         intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
         setResult(Activity.RESULT_OK, intent)
@@ -379,8 +438,11 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     fun Modifier(view: View) {
-        Editnote()
+       Editnote()
+
+
     }
+
     private fun DeleteNoteDialog(){
         val dialog= Dialog(this)
             dialog.apply {
@@ -408,6 +470,15 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        saveNote()
+        return true
+    }
+
+    override fun onBackPressed() {
+        saveNote()
+        super.onBackPressed()
+    }
 
     override fun finish() {
         super.finish()
@@ -426,6 +497,48 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
             3 -> theme.applyStyle(R.style.Theme3, true)
 
         }
+
+
+    }
+    private fun applyTextSize(){
+        when(sharedPreferences.getInt(textSize,1)){
+
+            1->{
+                titleView.textSize=22f
+                EdittitleView.textSize=22f
+                textView.textSize=18f
+                EdittextView.textSize=18f
+
+            }
+            2->{
+                titleView.textSize=27f
+                EdittitleView.textSize=27f
+                textView.textSize=22f
+                EdittextView.textSize=22f
+
+
+            }
+            3->{
+                titleView.textSize=30f
+                EdittitleView.textSize=30f
+                textView.textSize=26f
+                EdittextView.textSize=26f
+
+            }
+
+
+        }
+
+
+    }
+
+
+    private fun sendImage(){
+        val intent=Intent(Intent.ACTION_SEND);
+        intent.setType("image/jpeg");
+        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(""))
+        startActivity(Intent.createChooser(intent, "Share Image"))
+
 
 
     }

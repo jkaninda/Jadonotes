@@ -8,21 +8,63 @@
     <item android:id="@+id/action_save"
         app:showAsAction="always"
         android:icon="@drawable/ic_baseline_save"
+        android:orderInCategory="1"
         android:title="@string/save_note" />
+
 
     <item android:id="@+id/action_delete"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_delete"
-        android:title="@string/delete_note" />
+        android:orderInCategory="2"
 
+        android:title="@string/delete_note" />
 
     <item android:id="@+id/action_edit"
     app:showAsAction="never"
     android:icon="@drawable/ic_baseline_edit"
-    android:title="@string/edit_note" />
-    <item android:id="@+id/action_share"
-    app:showAsAction="never"
-    android:icon="@drawable/ic_baseline_share"
-    android:title="@string/share_note" />
+        android:orderInCategory="3"
+        android:title="@string/edit_note" />
 
+
+    <item
+        android:id="@+id/text_size"
+        android:title="@string/font_size"
+        app:showAsAction="never"
+        android:orderInCategory="4"
+        android:icon="@drawable/ic_baseline_share"
+        >
+        <!-- Starting the text color sub menu which have three items-->
+        <menu>
+            <item
+                android:id="@+id/action_small_text"
+                android:title="@string/small_text"
+                />
+            <item
+                android:id="@+id/action_medium_text"
+                android:title="@string/medium"
+                />
+            <item android:id="@+id/action_large_text"
+                android:title="@string/large" />
+        </menu>
+    </item>
+
+
+    <item
+        android:id="@+id/text_color"
+        android:title="@string/send"
+        app:showAsAction="never"
+        android:orderInCategory="4"
+        android:icon="@drawable/ic_baseline_share"
+        >
+        <menu>
+            <item android:id="@+id/action_share"
+                android:title="@string/share_note" />
+
+            <item
+                android:id="@+id/action_share_as_picture"
+                android:title="@string/send_as_picture"
+                />
+
+        </menu>
+    </item>
 </menu>

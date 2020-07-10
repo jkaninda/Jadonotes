@@ -25,6 +25,7 @@ class SettingsActivity : AppCompatActivity() {
     var appTheme=2
      lateinit var sharedPreferences: SharedPreferences
      private val themeKey = "currentTheme"
+    private val spancount = "current"
     private var isNightModeOn: Boolean = false
 
 
@@ -55,6 +56,7 @@ class SettingsActivity : AppCompatActivity() {
         card_style.setOnClickListener {
             chooseStyleDialog()
         }
+
 
 
     }
@@ -99,6 +101,7 @@ class SettingsActivity : AppCompatActivity() {
         val dialog=builder.create()
         dialog.show()
     }
+
 
      @SuppressLint("ResourceType")
      private fun chooseStyleDialog(){
@@ -220,6 +223,9 @@ class SettingsActivity : AppCompatActivity() {
     }
 
      */
+
+
+
 
 
     override fun onSupportNavigateUp(): Boolean {
