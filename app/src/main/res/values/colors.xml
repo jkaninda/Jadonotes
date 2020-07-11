@@ -17,6 +17,8 @@
     <color name="mainText">#000000</color>
     <color name="textAlt">#8D8F97</color>
     <color name="dayNight">#5D8AA8</color>
+    <color name="theme">#5D8AA8</color>
+
     <color name="dayNight1">#8D8F97</color>
     <color name="texthint">#66758e</color>
 

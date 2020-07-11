@@ -70,5 +70,10 @@
         <item name="colorAccent">@color/dayNight</item>
         <item name="android:windowBackground">@color/colorPrimaryDark</item>
     </style>
+    <style name="navtext">
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+
 
 </resources>

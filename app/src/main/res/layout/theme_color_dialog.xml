@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/notecolor"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_gravity="center"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="12sp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        tools:ignore="UselessParent">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:scrollbars="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/_1"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/round_shape"
+                android:backgroundTint="@color/theme"
+                android:backgroundTintMode="screen"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                />
+
+            <ImageButton
+                android:id="@+id/_2"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/round_shape"
+                android:backgroundTint="@color/theme1"
+                android:backgroundTintMode="screen"
+                android:contentDescription="TODO"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                />
+
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:scrollbars="horizontal">
+
+
+            <ImageButton
+                android:id="@+id/_3"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/round_shape"
+                android:backgroundTint="@color/theme2"
+                android:backgroundTintMode="screen"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                />
+
+            <ImageButton
+                android:id="@+id/_4"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/round_shape"
+                android:backgroundTint="@color/theme3"
+                android:backgroundTintMode="screen"
+                android:contentDescription="TODO"
+                android:foreground="?android:attr/selectableItemBackground"
+
+                />
+            />
+
+
+
+        </LinearLayout>
+</LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

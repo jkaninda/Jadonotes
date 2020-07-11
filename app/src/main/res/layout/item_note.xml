@@ -29,10 +29,10 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:layout_marginStart="05dp"
-                android:src="@drawable/ic_baseline_bookmark"
+                android:src="@drawable/pin"
                 tools:ignore="RtlHardcoded"
                 android:contentDescription="TODO" />
         <TextView

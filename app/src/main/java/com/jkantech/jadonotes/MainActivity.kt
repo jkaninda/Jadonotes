@@ -5,8 +5,10 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.*
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
@@ -42,6 +44,7 @@ import com.jkantech.jadonotes.ui.utils.MyPreferences
 import com.jkantech.jadonotes.ui.utils.loadNotes
 import com.jkantech.jadonotes.ui.utils.persistNote
 import com.jkantech.jadonotes.ui.views.*
+import com.kobakei.ratethisapp.RateThisApp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.text.SimpleDateFormat
@@ -57,7 +60,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     lateinit var adapter: NoteAdapter
     lateinit var notes: ArrayList<Note>
     private var gridLayoutManager: GridLayoutManager?=null
-    // lateinit var contextMenu:Context
     var appTheme = 2
     lateinit var sharedPreferences: SharedPreferences
     private val themeKey = "currentTheme"
@@ -65,6 +67,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     private lateinit var toggle: ActionBarDrawerToggle
     var doubleTap = false
     private val TAG = "msg"
+    private val SPANCOUNT_KEY="current"
+    private var spanCount=2
 
 
     @SuppressLint("SimpleDateFormat")
@@ -84,6 +88,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         title=""
+
+
+
+
+
+
+
 
         notes = loadNotes(this)
 
@@ -141,17 +152,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
         if (notes.isNotEmpty()) {
             loadNotes(this)
-            /*
-            notes.remove(
-                    Note(
-                            getString(R.string.notemodeletitre),
-                            getString(R.string.notemodeleText),
-                            Editdate,Createddate
-                    )
-            )
-
-
-             */
 
         } else {
             //Ajout de note si la liste de note est vide
@@ -177,16 +177,27 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         fab.setOnClickListener {
             AddNote()
         }
+        val orientation =this.resources.configuration.orientation
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            getSpanCount()
+
+        } else {
+            spanCount=3
+
+        }
+        rateApp()
+
 
 
         val recyclerView = findViewById<RecyclerView>(R.id.notes_recycler_view)
-        gridLayoutManager= GridLayoutManager(applicationContext,2,LinearLayoutManager.VERTICAL,false)
+        gridLayoutManager= GridLayoutManager(applicationContext,spanCount,LinearLayoutManager.VERTICAL,false)
         recyclerView?.layoutManager=gridLayoutManager
         recyclerView?.setHasFixedSize(true)
         // recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
         NbNotes()
+
 
         //Afficher Masquer le FloactingAction
         recyclerView.addOnScrollListener(object :RecyclerView.OnScrollListener(){
@@ -205,22 +216,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             }
 
         })
-        /*
-        search.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
-            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
-
-             //  adapter.getFilter().filter(charSequence.toString())
-
-                adapter.filter.filter(charSequence)
-
-            }
-
-            override fun afterTextChanged(editable: Editable) {}
-        })
 
 
-         */
 
 
     }
@@ -272,8 +269,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.action_settings->{
+        when(item.itemId) {
+            R.id.action_settings -> {
                 val intent = (Intent(this, SettingsActivity::class.java))
                 startActivityForResult(intent, REQUEST_STYLE)
                 overridePendingTransition(
@@ -282,33 +279,74 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                 )
                 return true
             }
-            R.id.action_about->{
-                startActivity(Intent(this,AboutActivity::class.java))
+            R.id.action_about -> {
+                startActivity(Intent(this, AboutActivity::class.java))
                 overridePendingTransition(
                         R.anim.activity_fade_in_animation,
                         R.anim.activity_fade_out_animation
                 )
+                return true
             }
-            R.id.action_share->{
+            R.id.action_share -> {
                 shareApp()
+                return true
 
             }
-           R.id.action_contact->{
-               val intent = Intent(
-                   Intent.ACTION_SENDTO, Uri.fromParts(
-                       "mailto", getString(R.string.dev_mail), null
-                   )
-               )
-               val subject: String? = null
-               intent.putExtra(Intent.EXTRA_SUBJECT, subject)
-               val message: String? = null
-               intent.putExtra(Intent.EXTRA_TEXT, message)
-               startActivity(Intent.createChooser(intent, getString(R.string.contact_me)))
-           }
+            R.id.action_contact -> {
+                val intent = Intent(
+                        Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", getString(R.string.dev_mail), null
+                )
+                )
+                val subject: String? = null
+                intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+                val message: String? = null
+                intent.putExtra(Intent.EXTRA_TEXT, message)
+                startActivity(Intent.createChooser(intent, getString(R.string.contact_me)))
+                return true
+            }
+            R.id.action_view_as_list -> {
+                return if (spanCount == 1) {
+                    true
+                } else {
+                    sharedPreferences.edit().putInt(SPANCOUNT_KEY, 1).apply()
+                    recreate()
 
 
+                    true
 
+                }
+            }
+            R.id.action_view_as_grid_2 -> {
+                return if (spanCount == 2) {
+                    true
+                } else {
+                    sharedPreferences.edit().putInt(SPANCOUNT_KEY, 2).apply()
+                    recreate()
+
+
+                    true
+
+                }
+            }
+            R.id.action_view_as_grid_3 -> {
+                return if (spanCount == 3) {
+                    true
+                } else {
+                    sharedPreferences.edit().putInt(SPANCOUNT_KEY, 3).apply()
+                    recreate()
+
+
+                    true
+
+                }
+            }
         }
+
+
+
+
+
         return super.onOptionsItemSelected(item)
     }
 
@@ -556,8 +594,59 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         sendIntent.type = "text/plain"
         startActivity(Intent.createChooser(sendIntent, getString(R.string.send_to)))
     }
+    private fun getSpanCount(){
+        when (sharedPreferences.getInt(SPANCOUNT_KEY, 2)) {
+            1->{
+                spanCount=1
 
 
+        }
+            2->{
+                spanCount=2
+
+            }
+
+            3->{
+                spanCount=3
+
+
+            }
+
+
+        }
+
+        }
+    private fun rateApp(){
+        // Custom condition: 3 days and 2 launches
+        val config = RateThisApp.Config(3, 4)
+        RateThisApp.init(config)
+
+        // Monitor launch times and interval from installation
+        RateThisApp.onCreate(this)
+        // If the condition is satisfied, "Rate this app" dialog will be shown
+        RateThisApp.showRateDialogIfNeeded(this)
+        RateThisApp.setCallback(object : RateThisApp.Callback {
+            override fun onNoClicked() {
+
+                return
+            }
+
+            override fun onYesClicked() {
+                startActivity(
+                    Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
+                    )
+                )
+            }
+
+            override fun onCancelClicked() {
+                return
+            }
+
+
+        })
+    }
 
     companion object {
 

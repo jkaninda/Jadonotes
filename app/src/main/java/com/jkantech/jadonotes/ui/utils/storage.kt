@@ -47,7 +47,6 @@ fun deleteNote(context: Context, note: Note): Boolean {
 private fun loadNote(context: Context, filename: String) : Note {
     val fileInput = context.openFileInput(filename)
     val inputStream = ObjectInputStream(fileInput)
-    val note = inputStream.readObject() as Note
-    return note
+    return inputStream.readObject() as Note
 }
 

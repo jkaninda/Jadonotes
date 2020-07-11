@@ -161,7 +161,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Style"
+                                android:text="@string/theme_color"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 />
@@ -170,7 +170,7 @@
                                 android:id="@+id/style_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="style"
+                                android:text="@string/theme_color"
                                 android:paddingBottom="0dp"/>
 
                         </LinearLayout>

@@ -19,7 +19,7 @@ import kotlin.collections.ArrayList
 
 class NoteAdapter(private val notes: ArrayList<Note>, private val itemClickListener: View.OnClickListener)
     : RecyclerView.Adapter<NoteAdapter.ViewHolder>(),Filterable {
-    lateinit var searchableList: List<Note>
+    lateinit var searchableList: MutableList<Note>
     private var onNothingFound: (() -> Unit)? = null
 
 
@@ -69,16 +69,16 @@ class NoteAdapter(private val notes: ArrayList<Note>, private val itemClickListe
     }
 
     private val filter: Filter = object : Filter() {
-        var filteredList: ArrayList<Note> = arrayListOf()
+        var filteredList: ArrayList<Note> = ArrayList(notes)
         override fun performFiltering(constraint: CharSequence): FilterResults {
 
             if (constraint.isEmpty()) {
                 filteredList.addAll(notes)
 
             } else {
-                val filterPattern = constraint.toString().toLowerCase().trim { it <= ' ' }
+                val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim { it <= ' ' }
                 for (item in 0..notes.size) {
-                    if (notes[item].title!!.toLowerCase().contains(filterPattern)) {
+                    if (notes[item].text!!.toLowerCase(Locale.ROOT).contains(filterPattern)) {
                         filteredList.add(notes[item])
                     }
                 }
@@ -89,7 +89,7 @@ class NoteAdapter(private val notes: ArrayList<Note>, private val itemClickListe
         }
 
         override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults) {
-        // filteredList = filterResults.values as ArrayList<Note>
+        //filteredList = filterResults.values as ArrayList<Note>
 
             notifyDataSetChanged()
         }

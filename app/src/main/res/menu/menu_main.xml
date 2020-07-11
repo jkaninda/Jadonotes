@@ -9,17 +9,39 @@
         app:showAsAction="ifRoom"
         app:actionViewClass="android.widget.SearchView"/>
 
-    <item android:id="@+id/action_contact"
+
+
+    <item
+        android:id="@+id/view_as"
+        android:title="@string/view_as"
+        app:showAsAction="never"
         android:orderInCategory="101"
+        android:icon="@drawable/ic_baseline_share"
+        >
+        <menu>
+            <item
+                android:id="@+id/action_view_as_list"
+                android:title="@string/view_as_list"
+                />
+            <item
+                android:id="@+id/action_view_as_grid_2"
+                android:title="@string/view_as_grid_2"
+                />
+            <item android:id="@+id/action_view_as_grid_3"
+                android:title="@string/view_as_grid_3" />
+        </menu>
+    </item>
+    <item android:id="@+id/action_contact"
+        android:orderInCategory="102"
         android:title="Contact"
         app:showAsAction="never"/>
 
     <item android:id="@+id/action_settings"
-        android:orderInCategory="102"
+        android:orderInCategory="103"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
     <item android:id="@+id/action_about"
-        android:orderInCategory="103"
+        android:orderInCategory="104"
         android:title="@string/a_propos"
         app:showAsAction="never"/>
 

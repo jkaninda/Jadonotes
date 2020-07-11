@@ -10,7 +10,7 @@
     <string name="edit_date">Modifié: </string>
     <string name="edit_at"> à </string>
     <string name="edited_on"> at </string>
-    <string name="app_version">Version: 1.2.7</string>
+    <string name="app_version">Version: 1.2.8</string>
 
 
     <plurals name="nb_notes">
@@ -101,4 +101,9 @@
     <string name="export_text">Exporter le texte</string>
     <string name="backup_notes">Sauvegarder les notes</string>
     <string name="history_backup">Historique de sauveagrde de notes</string>
+    <string name="view_as">Mode d\'affichage</string>
+    <string name="view_as_list">Liste</string>
+    <string name="view_as_grid_2">Grille 2</string>
+    <string name="view_as_grid_3">Grille 3</string>
+    <string name="theme_color">Couleur du thème</string>
 </resources>

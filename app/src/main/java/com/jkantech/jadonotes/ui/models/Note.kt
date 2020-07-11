@@ -8,6 +8,7 @@ class Note(
 
         var title: String? = "",
         var text: String? = "",
+       // var category: String?="",
         var editdate: String?="",
         var createdate: String?="",
         var color: String?="#ffdddd",

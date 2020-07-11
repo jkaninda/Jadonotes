@@ -4,12 +4,18 @@ package com.jkantech.jadonotes.ui.views
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -25,8 +31,6 @@ class SettingsActivity : AppCompatActivity() {
     var appTheme=2
      lateinit var sharedPreferences: SharedPreferences
      private val themeKey = "currentTheme"
-    private val spancount = "current"
-    private var isNightModeOn: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +58,8 @@ class SettingsActivity : AppCompatActivity() {
             chooseThemeDialog()
         }
         card_style.setOnClickListener {
-            chooseStyleDialog()
+            //chooseStyleDialog()
+            themeColorDialog()
         }
 
 
@@ -101,95 +106,6 @@ class SettingsActivity : AppCompatActivity() {
         val dialog=builder.create()
         dialog.show()
     }
-
-
-     @SuppressLint("ResourceType")
-     private fun chooseStyleDialog(){
-         val builder=AlertDialog.Builder(this)
-         builder.setTitle(getString(R.string.choose_style))
-         val res:Resources= resources
-         val styles=res.getStringArray(R.array.theme_styles)
-         val stylevalue=0
-         val checkedItem=sharedPreferences.getInt(themeKey,stylevalue)
-         builder.setSingleChoiceItems(styles,checkedItem){
-             dialog, which ->
-             when(which){
-                 0-> {
-                     sharedPreferences.edit().putInt(themeKey, 0).apply()
-
-                     if (checkedItem==0){
-
-                         dialog.dismiss()
-                     }else {
-
-                         val rIntent = Intent()
-                         rIntent.putExtra(themeKey, 0)
-                         setResult(Activity.RESULT_OK, rIntent)
-                         val intent = Intent(this, MainActivity::class.java)
-                         startActivity(intent)
-                         finish()
-                     }
-
-                 }
-                 1-> {
-                     sharedPreferences.edit().putInt(themeKey, 1).apply()
-
-                     if (checkedItem==1){
-
-                         dialog.dismiss()
-                     }else {
-
-                         val rIntent = Intent()
-                         rIntent.putExtra(themeKey, 1)
-                         setResult(Activity.RESULT_OK, rIntent)
-                         val intent = Intent(this, MainActivity::class.java)
-                         startActivity(intent)
-                         finish()
-                     }
-                 }
-                 2-> {
-                     sharedPreferences.edit().putInt(themeKey, 2).apply()
-
-                     if (checkedItem==2){
-
-                         dialog.dismiss()
-                     }else {
-
-                         val rIntent = Intent()
-                         rIntent.putExtra(themeKey, 2)
-                         setResult(Activity.RESULT_OK, rIntent)
-                         val intent = Intent(this, MainActivity::class.java)
-                         startActivity(intent)
-                         finish()
-                     }
-                 }
-                 3-> {
-                     sharedPreferences.edit().putInt(themeKey, 3).apply()
-
-                     if (checkedItem==3){
-
-                         dialog.dismiss()
-                     }else {
-
-                         val rIntent = Intent()
-                         rIntent.putExtra(themeKey, 3)
-                         setResult(Activity.RESULT_OK, rIntent)
-                         val intent = Intent(this, MainActivity::class.java)
-                         startActivity(intent)
-                         finish()
-                     }
-                 }
-
-             }
-
-
-         }
-                 .setPositiveButton(getString(R.string.action_annuler),DialogInterface.OnClickListener { dialog, which ->
-                 })
-         val dialog=builder.create()
-         dialog.show()
-     }
-
         @SuppressLint("ResourceAsColor")
         private fun checkTheme() {
             when (MyPreferences(this).darkMode) {
@@ -215,14 +131,100 @@ class SettingsActivity : AppCompatActivity() {
 
         }
     /*
-    private fun toast(message:String){
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
-    }
+
     private fun getPro(){
         toast("Passez au Premium pour utiliser ce beau style")
     }
 
      */
+
+    private fun themeColorDialog() {
+        val dialog = Dialog(this)
+        dialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.theme_color_dialog)
+            setCancelable(true)
+            val theme1=dialog.findViewById<ImageButton>(R.id._1)
+            val theme2=dialog.findViewById<ImageButton>(R.id._2)
+            val theme3=dialog.findViewById<ImageButton>(R.id._3)
+            val theme4=dialog.findViewById<ImageButton>(R.id._4)
+            val stylevalue=0
+            val checkedItem=sharedPreferences.getInt(themeKey,stylevalue)
+            theme1.setOnClickListener{
+                if (checkedItem==0){
+                    dismiss()
+                }else {
+
+
+                    sharedPreferences.edit().putInt(themeKey, 0).apply()
+                    val rIntent = Intent(this@SettingsActivity, MainActivity::class.java)
+                    rIntent.putExtra(themeKey, 0)
+                    setResult(Activity.RESULT_OK, rIntent)
+                    startActivity(rIntent)
+                    finish()
+
+                }
+
+
+            }
+            theme2.setOnClickListener {
+                if (checkedItem==1){
+                    dismiss()
+                }else {
+                    sharedPreferences.edit().putInt(themeKey, 1).apply()
+                    val rIntent = Intent(this@SettingsActivity, MainActivity::class.java)
+                    rIntent.putExtra(themeKey, 1)
+                    setResult(Activity.RESULT_OK, rIntent)
+                    startActivity(rIntent)
+                    finish()
+
+                }
+
+
+
+            }
+            theme3.setOnClickListener {
+                if (checkedItem==2){
+                    dismiss()
+                }else {
+
+
+                    sharedPreferences.edit().putInt(themeKey, 2).apply()
+                    val rIntent = Intent(this@SettingsActivity, MainActivity::class.java)
+                    rIntent.putExtra(themeKey, 2)
+                    setResult(Activity.RESULT_OK, rIntent)
+                    startActivity(rIntent)
+                    finish()
+
+                }
+
+
+
+            }
+            theme4.setOnClickListener {
+                if (checkedItem==3){
+                    dismiss()
+                }else {
+
+
+                    sharedPreferences.edit().putInt(themeKey, 3).apply()
+                    val rIntent = Intent(this@SettingsActivity, MainActivity::class.java)
+                    rIntent.putExtra(themeKey, 3)
+                    setResult(Activity.RESULT_OK, rIntent)
+                    startActivity(rIntent)
+                    finish()
+
+                }
+
+
+
+            }
+
+            show()
+
+
+        }
+    }
 
 
 
