@@ -2,35 +2,40 @@ package com.jkantech.jadonotes.ui.models
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.Serializable
 
 class Note(
-
+        var id:Int?=null,
         var title: String? = "",
-        var text: String? = "",
-       // var category: String?="",
-        var editdate: String?="",
-        var createdate: String?="",
-        var color: String?="#ffdddd",
-        var filename: String? = "") : Parcelable, Serializable {
+        var text: String? ="",
+        var category: String? = "",
+        var editdate: String? = "",
+        var createdate: String? = "",
+        var color: String? = "#ffdddd",
+        var text_size: Int=1
 
+
+
+):Parcelable {
     constructor(parcel: Parcel) : this(
+            parcel.readValue(Int::class.java.classLoader) as? Int,
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
             parcel.readString(),
-            parcel.readString())
-
-
+            parcel.readString(),
+            parcel.readInt()) {
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeValue(id)
         parcel.writeString(title)
         parcel.writeString(text)
+        parcel.writeString(category)
         parcel.writeString(editdate)
         parcel.writeString(createdate)
         parcel.writeString(color)
-        parcel.writeString(filename)
+        parcel.writeInt(text_size)
     }
 
     override fun describeContents(): Int {
@@ -38,7 +43,6 @@ class Note(
     }
 
     companion object CREATOR : Parcelable.Creator<Note> {
-        private val serialVersionUid: Long = 4242424242
         override fun createFromParcel(parcel: Parcel): Note {
             return Note(parcel)
         }
@@ -48,4 +52,3 @@ class Note(
         }
     }
 }
-

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_note_item"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="150dp"
     android:clickable="true"
     app:cardBackgroundColor="@color/notecolor"
     android:layout_marginBottom="5dp"
@@ -35,6 +35,11 @@
                 android:src="@drawable/pin"
                 tools:ignore="RtlHardcoded"
                 android:contentDescription="TODO" />
+            <TextView
+                android:id="@+id/note_cat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"/>
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
     <application
         android:allowBackup="true"
@@ -13,13 +14,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JadoNotes">
-        <activity android:name=".ui.views.BackupActivity"></activity>
+        <activity android:name=".ui.views.CategoryActivity"></activity>
+        <activity android:name=".ui.views.BackupActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.views.SettingsActivity" />
         <activity android:name=".ui.views.AboutActivity" />
         <activity
             android:name=".ui.views.AddNotesActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.views.NoteDetailActivity"
             android:windowSoftInputMode="adjustResize">

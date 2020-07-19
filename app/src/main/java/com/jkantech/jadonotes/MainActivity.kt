@@ -2,26 +2,16 @@ package com.jkantech.jadonotes
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.*
 import android.content.res.Configuration
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable
 import android.net.Uri
-import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.os.Parcelable
-import android.text.Editable
-import android.text.TextWatcher
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.View.VISIBLE
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -38,14 +28,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.jkantech.jadonotes.ui.models.Note
 import com.jkantech.jadonotes.ui.adapters.NoteAdapter
+import com.jkantech.jadonotes.ui.models.Note
+import com.jkantech.jadonotes.ui.database.DBManagerNote
 import com.jkantech.jadonotes.ui.utils.MyPreferences
-import com.jkantech.jadonotes.ui.utils.loadNotes
-import com.jkantech.jadonotes.ui.utils.persistNote
 import com.jkantech.jadonotes.ui.views.*
 import com.kobakei.ratethisapp.RateThisApp
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,8 +46,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
     lateinit var coordinatorLayout: CoordinatorLayout
     lateinit var adapter: NoteAdapter
-    lateinit var notes: ArrayList<Note>
+    var notes: ArrayList<Note> = ArrayList()
     private var gridLayoutManager: GridLayoutManager?=null
+    lateinit var dbManager: DBManagerNote
+
     var appTheme = 2
     lateinit var sharedPreferences: SharedPreferences
     private val themeKey = "currentTheme"
@@ -69,35 +59,34 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     private val TAG = "msg"
     private val SPANCOUNT_KEY="current"
     private var spanCount=2
+    var id:Int?=null
+
+    private var recyclerView:RecyclerView? = null
 
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
+
         sharedPreferences = getSharedPreferences(
+
                 "ThemePref",
                 Context.MODE_PRIVATE
         )
-        applyTheme()
+
         applyStyle()
-
-
 
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        title=""
+        title = ""
+
+       // applyTheme()
 
 
 
-
-
-
-
-
-        notes = loadNotes(this)
-
+        dbManager = DBManagerNote(this)
+        notes = dbManager.getNotesList() as ArrayList<Note>
         adapter = NoteAdapter(notes, this)
 
 
@@ -114,7 +103,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
 
         toggle = ActionBarDrawerToggle(
-                this, drawer,toolbar, 0, 0
+                this, drawer, toolbar, 0, 0
         )
 
 
@@ -131,38 +120,42 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         val date = Calendar.getInstance().time
         val heures = Date().hours
         val minutes = Date().minutes
+
         @SuppressLint("SimpleDateFormat")
         val formatter = SimpleDateFormat(getString(R.string.date_format))
         val edit_date = formatter.format(date).toString()
         val create_date = formatter.format(date).toString()
         val getheure = heures.toString() + ":" + minutes
         val Createddate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
-        val Editdate = getString(R.string.create_date) + " "  + create_date+" " + getString(R.string.edit_at) + " " + getheure
-
-
-
-        //val edit_date ="Modifié le "+ formatter.format(date).toString()+" "+"à"+" "+heures+":"+minutes
-       // val create_date ="Crée le "+ formatter.format(date).toString()+" " +"à" + " "+heures+":"+minutes
+        val Editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
 
 
 
 
-        //suppression de la note si la liste de de note n'est pas vide
 
 
-        if (notes.isNotEmpty()) {
-            loadNotes(this)
 
-        } else {
-            //Ajout de note si la liste de note est vide
+
+
+
+        if (notes.isEmpty()) {
+            val category = "Test"
+
+
 
             notes.add(
                     Note(
+                            0,
+
                             getString(R.string.notemodeletitre),
-                            getString(R.string.notemodeleText),
-                            Editdate,Createddate
+                            getString(R.string.notemodeleText), category,
+                            Editdate, Createddate, "#ffffff",1
                     )
             )
+
+
+
+
 
 
         }
@@ -171,13 +164,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
 
         coordinatorLayout = findViewById<CoordinatorLayout>(R.id.coordinator_layout)
-        // val addnote findViewById(R.id.create_note_fab).setOnClickListener(this)
 
         val fab = findViewById<FloatingActionButton>(R.id.create_note_fab)
         fab.setOnClickListener {
             AddNote()
         }
-        val orientation =this.resources.configuration.orientation
+        val orientation = this.resources.configuration.orientation
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             getSpanCount()
 
@@ -189,18 +181,19 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
 
 
-        val recyclerView = findViewById<RecyclerView>(R.id.notes_recycler_view)
+        recyclerView = findViewById<RecyclerView>(R.id.notes_recycler_view)
         gridLayoutManager= GridLayoutManager(applicationContext,spanCount,LinearLayoutManager.VERTICAL,false)
         recyclerView?.layoutManager=gridLayoutManager
         recyclerView?.setHasFixedSize(true)
+
         // recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = adapter
+        recyclerView?.adapter = adapter
 
         NbNotes()
 
 
         //Afficher Masquer le FloactingAction
-        recyclerView.addOnScrollListener(object :RecyclerView.OnScrollListener(){
+        recyclerView!!.addOnScrollListener(object :RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0 && fab.visibility == VISIBLE) {
@@ -229,9 +222,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         if (resultCode != Activity.RESULT_OK || data == null) {
             return
         }
+
         when (requestCode) {
             NoteDetailActivity.REQUEST_EDIT_NOTE ->processEditNoteResult(data)
         }
+
+
         if (requestCode == REQUEST_STYLE) {
             if (resultCode == Activity.RESULT_OK) {
                 applyStyle()
@@ -241,19 +237,21 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         }
     }
     override fun onClick(view: View) {
+
         if (view.tag != null) {
-            // startAddNotesActivity(view.tag as Int)
-            startEditNotesActivity(view.tag as Int)
-        }else{
+             startEditNotesActivity(view.tag as Int)
+        } else {
             when (view.id) {
                 R.id.create_note_fab -> AddNote()
             }
 
+
         }
-
-
-
     }
+
+
+
+
 
 
 
@@ -295,14 +293,15 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             R.id.action_contact -> {
                 val intent = Intent(
                         Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto", getString(R.string.dev_mail), null
-                )
+                        "mailto","contact.jkantech@gmail.com", null)
                 )
                 val subject: String? = null
                 intent.putExtra(Intent.EXTRA_SUBJECT, subject)
                 val message: String? = null
                 intent.putExtra(Intent.EXTRA_TEXT, message)
                 startActivity(Intent.createChooser(intent, getString(R.string.contact_me)))
+
+
                 return true
             }
             R.id.action_view_as_list -> {
@@ -311,6 +310,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                 } else {
                     sharedPreferences.edit().putInt(SPANCOUNT_KEY, 1).apply()
                     recreate()
+
 
 
                     true
@@ -353,11 +353,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         drawer.closeDrawer(GravityCompat.START)
 
+
         when (item.itemId) {
             R.id.nav_add_note -> {
                 AddNote()
                 return true
             }
+
             R.id.nav_settings->{
                 val intent = (Intent(this, SettingsActivity::class.java))
                 startActivityForResult(intent, REQUEST_STYLE)
@@ -370,24 +372,27 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             R.id.nav_backup->{
                 //toast(getString(R.string.backup_note_msg))
                 startActivity(Intent(this,BackupActivity::class.java))
-                return true
-            }
-            R.id.nav_about->{
-                startActivity(Intent(this,AboutActivity::class.java))
                 overridePendingTransition(
                     R.anim.activity_fade_in_animation,
                     R.anim.activity_fade_out_animation
                 )
                 return true
             }
-            R.id.nav_share->{
+            R.id.nav_about -> {
+                startActivity(Intent(this, AboutActivity::class.java))
+                overridePendingTransition(
+                        R.anim.activity_fade_in_animation,
+                        R.anim.activity_fade_out_animation
+                )
+                return true
+            }
+            R.id.nav_share -> {
                 shareApp()
                 return true
 
 
-
             }
-            R.id.nav_rateapp->{
+            R.id.nav_rateapp -> {
 
                 try {
                     startActivity(
@@ -416,10 +421,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
 
     private fun close() {
-        drawer.closeDrawer(GravityCompat.START)
 
 
     }
+
 
     fun processEditNoteResult(data: Intent) {
         val noteIndex = data.getIntExtra(NoteDetailActivity.EXTRA_NOTE_INDEX, -1)
@@ -436,16 +441,29 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                 NbNotes()
             }
         }
+
+        adapter.notifyDataSetChanged()
+
     }
 
+
+
     fun saveNote(note: Note, noteIndex: Int) {
-        persistNote(this, note)
+
         if (noteIndex < 0) {
             notes.add(0, note)
+            recyclerView?.setHasFixedSize(true)
+            recreate()
+
+
         } else {
             notes[noteIndex] = note
+
+
         }
+
         adapter.notifyDataSetChanged()
+
     }
 
     fun deleteNote(noteIndex: Int) {
@@ -454,15 +472,16 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             return
         }
         val note = notes.removeAt(noteIndex)
-        com.jkantech.jadonotes.ui.utils.deleteNote(this, note)
+        //com.jkantech.jadonotes.ui.utils.deleteNote(this, note)
+
         adapter.notifyDataSetChanged()
         Snackbar.make(coordinatorLayout, "${note.title}" +" "+getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
 
 
-        // Snackbar.make(coordinatorLayout, "${note.title}" +" "+getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).setBackgroundTint(getColor(R.color.aboutcolor)).setTextColor(getColor(R.color.white)).show()
-        //setAnchorView(fab).show()
 
     }
+
+
 
 
 
@@ -492,6 +511,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     *  Edition de la Note
     *
      */
+
     fun EditNote() {
         startEditNotesActivity(-1)
     }
@@ -508,6 +528,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                 R.anim.activity_fade_out_animation
         )
     }
+
+
     private fun recherche(searchView: SearchView) {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -654,10 +676,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
        private val REQUEST_EDIT = 0
 
     }
-private fun applyRow(){
 
-
-}
 
 
 }

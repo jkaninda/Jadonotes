@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity"
@@ -9,6 +10,7 @@
     android:fitsSystemWindows="true"
     android:background="?colorPrimary"
     android:fillViewport="true">
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -26,6 +28,8 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
+
+
             <LinearLayout
                 android:id="@+id/line1"
                 android:layout_width="match_parent"
@@ -40,6 +44,7 @@
                     android:textColor="@color/white"
                     android:layout_marginTop="50dp"
                     android:textAlignment="center"
+                    android:visibility="visible"
                     android:textSize="30sp"/>
                 <TextView
                     android:id="@+id/nb_notes"
@@ -50,20 +55,7 @@
                     android:layout_marginTop="20dp"
                     android:textAlignment="center"
                     android:textSize="16sp"/>
-                <EditText
-                    android:id="@+id/search"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="10dp"
-                    android:padding="5dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:hint="Recherche..."
-                    android:visibility="gone"
-                    android:imeOptions="actionSearch"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textSize="14sp"/>
+
 
             </LinearLayout>
 
@@ -74,8 +66,12 @@
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways"
+                app:contentInsetRight="20dp"
+                android:textAlignment="center"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:popupTheme="@style/Theme.JadoNotes.PopupOverlay"/>
+
+
 
 
 
@@ -104,6 +100,8 @@
         android:layout_margin="16dp"
         app:maxImageSize="50dp"
         android:src="@drawable/ic_baseline_add"
+        android:tint="@color/white"
+        app:backgroundTint="@color/white"
         app:layout_anchor="@id/notes_recycler_view"
         app:layout_anchorGravity="bottom|right|end"
         android:contentDescription="TODO" />

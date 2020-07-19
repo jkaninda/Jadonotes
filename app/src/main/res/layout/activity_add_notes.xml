@@ -19,9 +19,6 @@
 
     <include
         layout="@layout/containt_add_notes"/>
-    <include
-        layout="@layout/note_color"/>
-    <include
-        layout="@layout/note_style"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -56,8 +56,8 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
             R.id.dev_mail_btn -> {
                 val intent = Intent(
                     Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto", getString(R.string.dev_mail), null
-                    )
+                        "mailto","contact.jkantech@gmail.com", null)
+
                 )
                 val subject: String? = null
                 intent.putExtra(Intent.EXTRA_SUBJECT, subject)
@@ -76,7 +76,7 @@ class AboutActivity : AppCompatActivity(), View.OnClickListener {
                 val whatssap = Intent("android.intent.action.Main")
                 whatssap.component = ComponentName("com.whatsapp", "com.whatsapp.Conversation")
                 val stringBuilder = StringBuilder()
-                stringBuilder.append(PhoneNumberUtils.stripSeparators(getString(R.string.dev_num)))
+                stringBuilder.append(PhoneNumberUtils.stripSeparators("243892390948"))
                 stringBuilder.append("@s.whatsapp.net")
                 whatssap.putExtra("jid", stringBuilder.toString())
                 startActivity(whatssap)

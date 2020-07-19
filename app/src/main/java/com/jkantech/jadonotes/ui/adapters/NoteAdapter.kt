@@ -13,7 +13,6 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.models.Note
-import com.jkantech.jadonotes.ui.utils.NoteColorPicker
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -29,6 +28,7 @@ class NoteAdapter(private val notes: ArrayList<Note>, private val itemClickListe
         val titleView = cardView.findViewById(R.id.title) as TextView
         val excerptView = cardView.findViewById(R.id.excerpt) as TextView
         val date = cardView.findViewById(R.id.date) as TextView
+            val noteCat=cardView.findViewById<TextView>(R.id.note_cat)
        // val createdate = cardView.findViewById(R.id.create_date) as TextView
 
 
@@ -51,6 +51,7 @@ class NoteAdapter(private val notes: ArrayList<Note>, private val itemClickListe
         holder.titleView.text = note.title
         holder.excerptView.text = note.text
         holder.date.text = note.editdate
+        holder.noteCat.text= note.category
         //Changer la couleur de note
         holder.cardView.setCardBackgroundColor(Color.parseColor(note.color))
 

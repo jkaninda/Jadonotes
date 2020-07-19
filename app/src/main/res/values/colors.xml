@@ -8,10 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="notecolor">#ffdddd</color>
+    <color name="colorAccent">#ff7058</color>
+
 
     <color name="colorPrimary">#008000</color>
     <color name="colorPrimaryDark">#ffffff</color>
-    <color name="colorAccent">#25D366</color>
 
     <color name="mainTexte">#2D313D</color>
     <color name="mainText">#000000</color>

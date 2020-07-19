@@ -2,56 +2,74 @@ package com.jkantech.jadonotes.ui.views
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.jkantech.jadonotes.MainActivity
 import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.models.Note
+import com.jkantech.jadonotes.ui.database.DBManagerNote
 import com.jkantech.jadonotes.ui.utils.NoteColorPicker
-import kotlinx.android.synthetic.main.note_style.*
+import kotlinx.android.synthetic.main.containt_add_notes.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
     companion object {
         val REQUEST_EDIT_NOTE = 1
+        val REQUEST_ADD_NOTE = 1
 
         val EXTRA_NOTE = "note"
         val EXTRA_NOTE_INDEX = "noteIndex"
 
         val ACTION_SAVE = "com.jkantech.jadonotes.actions.ACTION_SAVE"
         val ACTION_DELETE = "com.jkantech.jadonotes.action.ACTION_DELETE"
+        private val SPEECH_REC = 0
+        const val TAG = "message"
+
+
     }
 
 
     lateinit var note: Note
     var noteIndex: Int = -1
+    lateinit var time: TextView
     lateinit var titleView: TextView
     lateinit var textView: TextView
     private lateinit var CardNote: CardView
     lateinit var notecolor: FrameLayout
 
+
+    val PERMISSION_RECORD_AUDIO = 0
 
 
     //card colors
@@ -63,18 +81,23 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
     private lateinit var colorSix: ImageButton
     private lateinit var colorSeven: ImageButton
     private lateinit var colorEight: ImageButton
-   private lateinit var  edit_date:String
-    private lateinit var create_date:String
-    private lateinit var getheure:String
+    private lateinit var edit_date: String
+    private lateinit var create_date: String
+    private lateinit var getheure: String
+    private lateinit var colorButton: AppCompatImageView
+    private lateinit var colorLayout: LinearLayout
+    private lateinit var micButton: AppCompatImageView
+    lateinit var fontButton: AppCompatImageView
+    lateinit var saveButton: AppCompatImageView
+
+    lateinit var myCalendar: Calendar
 
 
-            private var cardColor: String? = null
+    private var cardColor: String? = null
     private var colorId: Int? = null
 
-    var appTheme=2
     lateinit var sharedPreferences: SharedPreferences
     private val themeKey = "currentTheme"
-    private val textSize = "currentsize"
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     @SuppressLint("SetTextI18n")
@@ -84,13 +107,13 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
         super.onCreate(savedInstanceState)
         sharedPreferences = getSharedPreferences(
-            "ThemePref",
-            Context.MODE_PRIVATE
+                "ThemePref",
+                Context.MODE_PRIVATE
         )
 
         applyStyle()
 
-        setContentView(R.layout.add_notes)
+        setContentView(R.layout.activity_add_notes)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -99,15 +122,16 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
         note = intent.getParcelableExtra<Note>(EXTRA_NOTE)
         noteIndex = intent.getIntExtra(EXTRA_NOTE_INDEX, -1)
+        time = findViewById(R.id.time)
 
-        titleView = findViewById<TextView>(R.id.title)
-        textView = findViewById<TextView>(R.id.text)
-        CardNote=findViewById(R.id.card_color)
+        titleView = findViewById(R.id.title)
+        textView = findViewById(R.id.text)
+        CardNote = findViewById(R.id.card_color)
 
         titleView.text = note.title
         textView.text = note.text
-        notecolor=findViewById(R.id.notecolor)
-        notecolor.visibility= GONE
+
+        myCalendar = Calendar.getInstance()
 
 
         /*
@@ -116,20 +140,17 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         val date = Calendar.getInstance().time
         val heures = Date().hours
         val minutes = Date().minutes
+
         @SuppressLint("SimpleDateFormat")
         val formatter = SimpleDateFormat(getString(R.string.date_format))
         edit_date = formatter.format(date).toString()
         create_date = formatter.format(date).toString()
         getheure = heures.toString() + ":" + minutes
+        val hour = getheure + " " + edit_date
         //val taille:Int=t
+        time.text = hour
 
-              applyTextSize()
-
-
-        if (title.length  >= 50) {
-            toast("Vous avez atteind la taille limite , Max 50")
-
-        }
+        applyTextSize()
 
 
         //Initialisation des couleurs
@@ -138,6 +159,13 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         colorThree = findViewById(R.id._3)
         colorFour = findViewById(R.id._4)
         colorFive = findViewById(R.id._5)
+        //Button
+        colorButton = findViewById(R.id.colorButton)
+
+        colorLayout = findViewById(R.id.colorLayout)
+        micButton = findViewById(R.id.micButton)
+        fontButton = findViewById(R.id.fontButton)
+        saveButton = findViewById(R.id.saveButton)
 
 
         colorOne.setOnClickListener(this)
@@ -145,8 +173,10 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         colorThree.setOnClickListener(this)
         colorFour.setOnClickListener(this)
         colorFive.setOnClickListener(this)
-
-
+        colorButton.setOnClickListener(this)
+        micButton.setOnClickListener(this)
+        fontButton.setOnClickListener(this)
+        saveButton.setOnClickListener(this)
 
 
         //application du couleur du CardView par defaud
@@ -156,70 +186,39 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         CardNote.setCardBackgroundColor(Color.parseColor(cardColor))
 
 
-        val fab = findViewById<FloatingActionButton>(R.id.style_note_fab)
-        fab.setOnClickListener {
-            if (notecolor.isVisible) {
-                style_note_fab.setImageDrawable(getDrawable(R.drawable.ic_baseline_color_lens))
-                style_note_fab.backgroundTintList!!.defaultColor
-
-                notecolor.visibility = GONE
-
-            } else {
-                notecolor.visibility = VISIBLE
-                style_note_fab.setImageDrawable(getDrawable(R.drawable.ic_baseline_cancel))
-                style_note_fab.backgroundTintList!!.defaultColor
-
+        titleView.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                Log.i(TAG, "rien")
 
 
             }
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (titleView.length() >= 49) {
+                    toast(getString(R.string.max_title_characters))
 
-        }
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                Log.i(TAG, "rien")
+            }
 
 
-
-
-
+        })
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.add_note_menu, menu)
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_save -> {
                 saveNote()
                 true
             }
-            R.id.action_small_text->{
-                titleView.textSize=22f
-                textView.textSize=18f
-                sharedPreferences.edit().putInt(textSize,1).apply()
-
-
-
-                return true
-            }
-            R.id.action_medium_text->{
-                titleView.textSize=27f
-                textView.textSize=22f
-                sharedPreferences.edit().putInt(textSize,2).apply()
-
-                return true
-            }
-            R.id.action_large_text->{
-                titleView.textSize=30f
-                textView.textSize=26f
-                sharedPreferences.edit().putInt(textSize,3).apply()
-                return true
-            }
-
-
-
 
             else -> super.onOptionsItemSelected(item)
         }
@@ -240,11 +239,9 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         note.title = titleView.text.toString()
         note.text = textView.text.toString()
         note.editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
-        note.createdate = getString(R.string.create_date) + " "  + create_date+" " + getString(R.string.edit_at) + " " + getheure
-        note.color="#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
-
-
-
+        note.createdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
+        note.color = "#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
+        val dbManager = DBManagerNote(this)
 
         if (note.title!!.trim() == "" && note.text!!.trim() == "") {
             // toast("Aucune note à sauvegarder")
@@ -255,6 +252,9 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
             intent.putExtra(EXTRA_NOTE, note as Parcelable)
             intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
             //toast(getString(R.string.note_saved))
+            dbManager.insert(note.title!!, note.text!!, "Exemple", note.editdate!!, note.createdate!!, note.color!!,note.text_size)
+
+
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
@@ -264,13 +264,14 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
         note.title = titleView.text.toString()
         note.text = textView.text.toString()
         note.editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
-        note.createdate = getString(R.string.create_date) + " "  + create_date+" " + getString(R.string.edit_at) + " " + getheure
-        note.color="#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
+        note.createdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
+        note.color = "#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
+        val dbManager = DBManagerNote(this)
+
 
 
 
         if (note.title!!.trim() == "" && note.text!!.trim() == "") {
-             //toast("Aucune note à sauvegarder")
 
             finish()
 
@@ -278,27 +279,20 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
             intent = Intent(ACTION_SAVE)
             intent.putExtra(EXTRA_NOTE, note as Parcelable)
             intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
+            dbManager.insert(note.title!!, note.text!!, "Exemple", note.editdate!!, note.createdate!!, note.color!!,note.text_size)
 
-            //toast("Note sauvegardée automatiquemnt")
+
+
 
             setResult(Activity.RESULT_OK, intent)
             finish()
         }
     }
 
-    fun deleteNote() {
-        intent = Intent(ACTION_DELETE)
-        intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
-        setResult(Activity.RESULT_OK, intent)
-        finish()
-    }
 
     fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
-
-
 
 
     override fun finish() {
@@ -308,7 +302,6 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
                 R.anim.activity_fade_out_animation
         )
     }
-
 
 
     private fun getColor(): ImageButton {
@@ -360,6 +353,40 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
                 }
 
+                R.id.colorButton -> {
+                    if (colorLayout.isVisible) {
+
+                        colorLayout.visibility = GONE
+
+                    } else {
+                        colorLayout.visibility = VISIBLE
+
+
+                    }
+
+                }
+                R.id.micButton -> {
+                    if (colorLayout.isVisible) {
+
+                        colorLayout.visibility = GONE
+                    }
+                    callPermissionRecord()
+
+
+                }
+
+
+                R.id.fontButton -> {
+                    if (colorLayout.isVisible) {
+
+                        colorLayout.visibility = GONE
+                    }
+                    showfontSizePopup()
+                }
+                R.id.saveButton -> {
+                    saveNote()
+                }
+
 
             }
 
@@ -369,16 +396,9 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
     }
 
-    fun style(view: View) {
-        if (notecolor.isVisible){
-            notecolor.visibility= GONE
-        }else
-        notecolor.visibility= VISIBLE
 
-
-    }
     private fun applyTextSize() {
-        when (sharedPreferences.getInt(textSize, 1)) {
+        when (note.text_size) {
 
             1 -> {
                 titleView.textSize = 22f
@@ -396,13 +416,77 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
                 textView.textSize = 26f
 
             }
+
+
+
+
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK || data == null) {
+            return
+        }
+
+        if (requestCode == SPEECH_REC) {
+            if (resultCode == Activity.RESULT_OK) {
+                val result: ArrayList<String>? = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                if (result != null) {
+                    textView.text = result.get(0)
+
+                }
+
+
+            }
+        }
+
+
+    }
+
+    private fun callPermissionRecord() {
+
+        if (ContextCompat.checkSelfPermission(this,
+                        android.Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(android.Manifest.permission.RECORD_AUDIO),
+                    PERMISSION_RECORD_AUDIO)
+        } else {
+            askSpeechInput()
+        }
+    }
+
+    private fun askSpeechInput() {
+        if (!SpeechRecognizer.isRecognitionAvailable(this)) {
+            toast(getString(R.string.speech_not_available))
+        } else {
+            val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            i.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.speech))
+            startActivityForResult(i, SPEECH_REC)
+
+
         }
     }
 
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_RECORD_AUDIO -> {
+                if (grantResults.isNotEmpty()
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    askSpeechInput()
+
+                }
+            }
+        }
+    }
 
 
-        private fun applyStyle() {
+    private fun applyStyle() {
 
         when (sharedPreferences.getInt(themeKey, 0)) {
 
@@ -415,5 +499,41 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener {
 
 
     }
+
+    private fun showfontSizePopup() {
+        val popupMenu = PopupMenu(this, fontButton)
+        popupMenu.inflate(R.menu.fontsize_menu)
+        popupMenu.menu.getItem(0).title = getString(R.string.small_text)
+        popupMenu.menu.getItem(1).title = getString(R.string.medium)
+        popupMenu.menu.getItem(2).title = getString(R.string.large)
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.action_small_text -> {
+                    titleView.textSize = 22f
+                    textView.textSize = 18f
+                    note.text_size=1
+
+
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.action_medium_text -> {
+                    titleView.textSize = 27f
+                    textView.textSize = 22f
+                    note.text_size=2
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.action_large_text -> {
+                    titleView.textSize = 30f
+                    textView.textSize = 26f
+                    note.text_size=3
+                    return@setOnMenuItemClickListener true
+                }
+
+            }
+            false
+        }
+        popupMenu.show()
+    }
+
 
 }

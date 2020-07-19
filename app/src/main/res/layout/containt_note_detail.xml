@@ -1,113 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/note_detail_color"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="50dp"
-    android:background="@color/notecolor"
     tools:context=".ui.views.NoteDetailActivity">
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_color"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/notecolor">
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/touchView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="15dp"
+            android:layout_marginBottom="0dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
 
 
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:textSize="22sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:maxLength="50"
+                    android:onClick="Modifier"
+                    android:maxLines="4"
+                    android:hint="@string/note_title"
+                    android:textColorHint="@color/texthint"
+                    android:textColor="@color/black"
+                    />
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="00dp"
+                    android:onClick="Modifier"
+                    android:textSize="19sp"
+                    android:textColor="@color/black"
+                    android:maxLength="4000"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
 
+                    android:textColorHint="@color/texthint"
+                    android:hint="@string/note_text"
+                    />
+                <EditText
+                    android:id="@+id/edit_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
+                    android:textSize="22sp"
+                    android:visibility="gone"
+                    android:background="@null"
+                    android:maxLength="50"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/texthint"
+                    android:hint="@string/note_title"
+                    android:autofillHints=""
+                     />
+
+                <EditText
+                    android:id="@+id/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textSize="19sp"
+                    android:layout_gravity="center"
+                    android:inputType="textMultiLine|textAutoComplete|textAutoCorrect"
+                    android:visibility="gone"
+                    android:background="@null"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:textColorHint="@color/texthint"
+                    android:hint="@string/note_text"
+                    android:autofillHints=""
+                    />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="right"
+                    android:orientation="vertical"
+                    tools:ignore="RtlHardcoded">
+
+                    <TextView
+                        android:id="@+id/edit_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:text="02 07 2020"
+                        android:fontFamily="@font/itim"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="#232323" />
+                    <TextView
+                        android:id="@+id/create_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="10sp"
+                        android:text="02 07 2020"
+                        android:fontFamily="@font/itim"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="#232323" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-15dp"
+        android:paddingBottom="15dp"
+        app:cardBackgroundColor="?colorPrimary"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp"
+        android:visibility="gone"
+        app:cardPreventCornerOverlap="true">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="30dp">
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:textSize="22sp"
-                android:layout_marginStart="10dp"
-                android:maxLength="50"
-                android:onClick="Modifier"
-                android:maxLines="4"
-                android:hint="@string/note_title"
-                android:textColorHint="@color/texthint"
-                android:textColor="@color/black"
-                />
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="00dp"
-                android:onClick="Modifier"
-                android:textSize="19sp"
-                android:textColor="@color/black"
-                android:maxLength="4000"
-                android:textColorHint="@color/texthint"
-                android:hint="@string/note_text"
-                />
-            <EditText
-                android:id="@+id/edit_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:textSize="22sp"
-                android:visibility="gone"
-                android:background="@null"
-                android:textColor="@color/black"
-                android:textColorHint="@color/texthint"
-                android:hint="@string/note_title"
-                android:autofillHints=""
-                android:inputType="textMultiLine" />
-
-            <EditText
-                android:id="@+id/edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textSize="19sp"
-                android:layout_marginStart="10dp"
-                android:layout_gravity="center"
-                android:visibility="gone"
-                android:background="@null"
-                android:textColor="@color/black"
-                android:layout_marginEnd="10dp"
-                android:textColorHint="@color/texthint"
-                android:hint="@string/note_text"
-                android:autofillHints=""
-                android:inputType="textMultiLine" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="10dp"
+            android:layout_marginStart="@dimen/material_margin"
+            android:layout_marginEnd="@dimen/material_margin"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/edit_date"
-                android:layout_width="wrap_content"
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:overScrollMode="never"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/micButton"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_baseline_mic_24"
+                        app:tint="@color/white"
+                        />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/colorButton"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_baseline_color_lens_24"
+                        app:tint="@color/white" />
+
+
+
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/fontButton"
+                        android:layout_width="56dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="8dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_baseline_format_size_24"
+                        app:tint="@color/white" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+            <LinearLayout
+                android:id="@+id/colorLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:text="02 07 2020"
-                android:fontFamily="@font/itim"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#232323" />
-            <TextView
-                android:id="@+id/create_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="10sp"
-                android:text="02 07 2020"
-                android:fontFamily="@font/itim"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="#232323" />
+                android:orientation="vertical"
+                android:visibility="gone">
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="18dp"
+                    android:text="@string/note_background_color"
+                    android:textAppearance="?textAppearanceCaption"
+                    android:textColor="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/paletteButton"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:background="?selectableItemBackgroundBorderless"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_baseline_color_lens_24"
+                        app:tint="@color/white" />
+                    <ImageButton
+                        android:id="@+id/_1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/round_shape"
+                        android:backgroundTint="@color/one"
+                        android:backgroundTintMode="screen"
+                        android:layout_marginStart="10dp"
+                        />
+
+                    <ImageButton
+                        android:id="@+id/_2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/round_shape"
+                        android:backgroundTint="@color/two"
+                        android:backgroundTintMode="screen"
+                        android:contentDescription="TODO" />
+
+                    <ImageButton
+                        android:id="@+id/_3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/round_shape"
+                        android:backgroundTint="@color/three"
+                        android:backgroundTintMode="screen"
+                        />
+
+                    <ImageButton
+                        android:id="@+id/_4"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/round_shape"
+                        android:backgroundTint="@color/four"
+                        android:backgroundTintMode="screen"
+                        android:contentDescription="color_4" />
+
+                    <ImageButton
+                        android:id="@+id/_5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/round_shape"
+                        android:backgroundTint="@color/five"
+                        android:contentDescription="color_5" />
+
+
+
+                </LinearLayout>
+
+
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
-    </RelativeLayout>
-</ScrollView>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
+</RelativeLayout>

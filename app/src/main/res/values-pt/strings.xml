@@ -1,0 +1,91 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Jado Notes</string>
+    <string name="action_settings">Sconfigurações</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="next">Segue</string>
+    <string name="create_date">crio:</string>
+    <string name="edit_date">editada: </string>
+    <string name="edit_at"> em </string>
+    <string name="edited_on"> on </string>
+    <string name="app_version">Version: 1.2.9</string>
+    <plurals name="nb_notes">
+        <item quantity="one" tools:ignore="ImpliedQuantity">nota</item>
+        <item quantity="other">notas</item>
+    </plurals>
+    <string-array name="theme_mode">
+        <item>Dia</item>
+        <item>Escuro</item>
+        <item>Automático</item>
+    </string-array>
+    <string name="delete_message">Deseja excluir esta nota? </string>
+    <string name="action_annuler">Cancelar</string>
+    <string name="a_propos">Sobre </string>
+
+    <string name="feed_back_msg"><![CDATA[En cas de souci ou si vous avez des suggestions a me donner afin d’ajouter d’autres fonctionnalités ; n’hésitez pas a me contacter en précisant votre souhait ou problèmes que vous rencontrez , je serai ravi de recevoir votre Feedback .]]></string>
+    <string name="feed_back">Feedback</string>
+    <string name="rate_msg">Si vous aimez cette application, merci de le noter sur Google Play Store, une note de 5 étoiles m\'encouragera à continuer le developpement.:)</string>
+    <string name="notemodeletitre">Bem-vindo ao usar o Jado Notes!</string>
+    <string name="notemodeleText">O Jado Notes é um assistente essencial para você registrar sua mente e organizar sua vida. \n\n O Jado Notes permite criar e salvar suas anotações rapidamente. Você pode facilmente adicionar notas, classificar suas notas por rótulos ou cores e pesquisá-las mais tarde. \n\n Mas também é possível arquivar suas anotações, compartilhar com seus amigos e familiares. \n Por último, você pode arquivar suas anotações e compartilhá-las com seus amigos e familiares. \n\n Se você tiver alguma dúvida ou conselho, não hesite em entrar em contato comigo! Eu farei o meu melhor para desenvolver o Jado Notes! Espero que você possa desfrutar da gravação melhor e mais segura da sua vida! </string>
+    <string name="exit_msg">Sur to exit  </string>
+    <string name="action_oui">sim</string>
+    <!-- Used in NavigationDrawer -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="note_detail">Detalhe</string>
+    <string name="note_edited">Nota editada</string>
+    <string name="editnote_title">Editar nota</string>
+    <string name="daymode">Modo de luz</string>
+    <string name="night_mode">Modo escuro</string>
+    <string name="mode_auto">Modo automático</string>
+    <string name="add_note_title">Adicionar nota</string>
+    <string name="note_saved">nota salva</string>
+    <string name="choose_style">escolha o estilo</string>
+    <string name="apparence_mode">Modo de aparência</string>
+    <string name="date_format">dd/MM/yyyy</string>
+    <string name="note_deleted">excluída</string>
+    <string name="note_title">Título</string>
+    <string name="note_text">Notas</string>
+    <string name="backup">Exportação &amp; Backup </string>
+    <string name="theme">Tema </string>
+    <string name="apparence">Aparência </string>
+    <string name="all_notes">Todas as notas</string>
+    <string name="save_note">Salve</string>
+    <string name="delete_note">Excluir</string>
+    <string name="edit_note">Editar</string>
+    <string name="share_note">Compartilhar como arquivo de texto </string>
+    <string name="backup_note_msg">Não disponível</string>
+    <string name="img_description">description image  </string>
+    <string name="nav_share">Compartilhar </string>
+    <string name="code_source">Source code  </string>
+    <string name="help_transl">Ajude-nos a traduzir </string>
+    <string name="nav_rateapp">Classifique esta aplicação </string>
+    <string name="slogant">Rápido e fácil de usar  </string>
+    <string name="share_app_msg"> Jado Notes \n \n Experimente esta aplicação, é uma aplicação impressionante para tarefas diárias. Compartilhe também e avalie este aplicativo. \n \n Link para download: https://play.google.com/store/apps/details?id=com.jkantech.jadonotes </string>
+    <string name="press_again_to_exit">Clique novamente para sair</string>
+    <string name="send_to">Enviar para … </string>
+    <string name="contact_me">Contate-me</string>
+    <string name="small_text">Padrão </string>
+    <string name="medium">Média </string>
+    <string name="large">ampla </string>
+    <string name="send">Enviar</string>
+    <string name="font_size">Tamanho da fonte </string>
+    <string name="send_as_picture">Enviar como imagem  </string>
+    <string name="export_text">Exportar texto </string>
+    <string name="backup_notes">Salvar anotações </string>
+    <string name="history_backup">History saved backup data</string>
+    <string name="view_as">Vista como </string>
+    <string name="view_as_list">Lista</string>
+    <string name="view_as_grid_2">Rede 2</string>
+    <string name="view_as_grid_3">Rede 3</string>
+    <string name="theme_color">Cor do tema</string>
+    <string name="all_category">Categoria</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_category_to_display">Nenhuma categoria para exibir</string>
+    <string name="category">Categoria</string>
+    <string name="note_background_color"> Note background-color </string>
+    <string name="speech"> Diga algo! </string>
+    <string name="speech_not_available">O reconhecedor de fala não está disponível neste dispositivo</string>
+    <string name="max_title_characters">Número máximo de caracteres (50) atingido.</string>
+
+
+</resources>

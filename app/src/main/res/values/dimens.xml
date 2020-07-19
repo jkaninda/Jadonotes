@@ -17,4 +17,23 @@
     <dimen name="half_margin">4dp</dimen>
     <dimen name="divider_margin">24dp</dimen>
 
+
+
+    <dimen name="grid_item_spacing">2dp</dimen>
+    <dimen name="checkbox_padding">20dp</dimen>
+    <dimen name="empty_image_size">128dp</dimen>
+    <dimen name="empty_animation_size">188dp</dimen>
+    <dimen name="list_margin">0dp</dimen>
+    <dimen name="material_margin">16dp</dimen>
+    <dimen name="image_height">256dp</dimen>
+    <dimen name="image_height_list">192dp</dimen>
+    <dimen name="home_action_button_size">64dp</dimen>
+    <dimen name="pin_digit_size">64dp</dimen>
+    <dimen name="pin_view_space_btw_digits">36dp</dimen>
+    <dimen name="pin_view_space_btw_digits_top">24dp</dimen>
+    <dimen name="pin_view_digit_text">20sp</dimen>
+
+    <bool name="is_tablet">false</bool>
+    <integer name="num_of_cols">1</integer>
+
 </resources>
