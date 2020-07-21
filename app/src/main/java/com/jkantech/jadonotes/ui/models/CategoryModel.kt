@@ -1,5 +1,8 @@
 package com.jkantech.jadonotes.ui.models
 
+import android.os.Parcel
+import android.os.Parcelable
+
 
 class CategoryModel(
 

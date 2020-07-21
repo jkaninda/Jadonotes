@@ -8,7 +8,6 @@
     <string name="edit_date">Modified: </string>
     <string name="edit_at"> at </string>
     <string name="edited_on"> on </string>
-    <string name="app_version">Version: 1.2.9</string>
     <plurals name="nb_notes">
         <item quantity="one">note</item>
         <item quantity="other">notes</item>
@@ -88,6 +87,21 @@
     <string name="speech">Say something!</string>
     <string name="speech_not_available">Speech recognizer is not available in this device</string>
     <string name="max_title_characters">Maximum number of characters (50) reached.</string>
+    <string name="add_note_extra">Add new note</string>
+    <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="no_category">No category added</string>
+    <string name="add_category">Add category</string>
+    <string name="update_category">Update category</string>
+    <string name="enter_category">Enter category</string>
+    <string name="cat_personal">Personal</string>
+    <string name="cat_business">Business</string>
+    <string name="cat_insurance">Insurance</string>
+    <string name="cat_school">School</string>
+    <string name="cat_work">Work</string>
+    <string name="pas_de_notes">No Notes</string>
+    <string name="searchhint">Search…</string>
 
 
 </resources>

@@ -7,7 +7,6 @@
     <string name="edit_date">Modifié: </string>
     <string name="edit_at"> à </string>
     <string name="edited_on"> à </string>
-    <string name="app_version">Version: 1.2.9</string>
 
     <plurals name="nb_notes">
         <item quantity="one" tools:ignore="ImpliedQuantity">note</item>
@@ -84,13 +83,28 @@
     <string name="view_as_grid_2">Grille 2</string>
     <string name="view_as_grid_3">Grille 3</string>
     <string name="theme_color">Couleur du thème</string>
-    <string name="all_category">Categorie</string>
+    <string name="all_category">Catégorie</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_category_to_display">Aucune catégorie à afficher </string>
-    <string name="category">Category</string>
+    <string name="category">Catégory</string>
     <string name="note_background_color">Couleur d\'arrière-plan de note</string>
     <string name="speech">Dites quelque chose! </string>
     <string name="speech_not_available">La reconnaissance vocale n\'est pas disponible sur cet appareil</string>
     <string name="max_title_characters">Nombre maximum de caractères (50) atteint. </string>
+    <string name="add_note_extra">Ajouter une nouvelle note</string>
+    <string name="update">Modifier</string>
+    <string name="cancel">Annuler</string>
+    <string name="add">Ajouter</string>
+    <string name="no_category">Pas de cotégorie à ajouter</string>
+    <string name="add_category">Ajouter catégorie</string>
+    <string name="enter_category">Entrer le nom de la catégorie</string>
+    <string name="update_category">Modifier</string>
+    <string name="cat_personal">Personnel</string>
+    <string name="cat_business">Business</string>
+    <string name="cat_insurance">Assurence</string>
+    <string name="cat_school">École</string>
+    <string name="cat_work">Travail</string>
+    <string name="pas_de_notes">Pas de Notes</string>
+    <string name="searchhint">Recherche…</string>
 
 </resources>

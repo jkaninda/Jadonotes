@@ -6,10 +6,14 @@ import android.database.SQLException
 import android.database.sqlite.SQLiteDatabase
 import com.jkantech.jadonotes.ui.databasehelper.DatabaseHelper
 import com.jkantech.jadonotes.ui.models.CategoryModel
-import com.jkantech.jadonotes.ui.models.Note
-import com.jkantech.jadonotes.ui.utils.*
+import com.jkantech.jadonotes.ui.utils.CATEGORY_NAME
+import com.jkantech.jadonotes.ui.utils.ID
+import com.jkantech.jadonotes.ui.utils.TABLE_CATEGORY
 
 
+/**
+ * Created by Pinkal on 25/5/17.
+ */
 class DBManagerCategory(val context: Context) {
 
     lateinit var dbHelper: DatabaseHelper
@@ -85,42 +89,10 @@ class DBManagerCategory(val context: Context) {
         return categoryName
     }
 
-
-    fun getCategoryList(): MutableList<CategoryModel> {
-
-        open()
-
-        val category = mutableListOf<CategoryModel>()
-
-        val query = "SELECT * FROM " + TABLE_CATEGORY
-        database.rawQuery(query, null).use {cursor->
-            while (cursor.moveToNext()) {
-
-
-                val categorie = CategoryModel(
-                        cursor.getInt(cursor.getColumnIndex(ID)),
-                        cursor.getString(cursor.getColumnIndex(CATEGORY_NAME))
-
-                )
-
-                category.add(categorie)
-
-
-            }
-
-        }
-        return category
-    }
-
-
-
-
-
-
     /**
      * get category list from Category table
      */
-    fun getCategoryList2(): ArrayList<CategoryModel> {
+    fun getCategoryList(): ArrayList<CategoryModel> {
         val arrayList = ArrayList<CategoryModel>()
 
         open()
@@ -144,24 +116,24 @@ class DBManagerCategory(val context: Context) {
         return arrayList
     }
 
-    fun getListOfCategory(): ArrayList<CategoryModel> {
+    fun getListOfCategory(): List<String> {
         open()
 
-        val labels: ArrayList<CategoryModel> = ArrayList()
+        val labels: ArrayList<String> = ArrayList()
 
         val query = "SELECT * FROM " + TABLE_CATEGORY
         val cursor = database.rawQuery(query, null)
 
         if (cursor != null && cursor.moveToFirst()) {
             do {
-                //labels.add(cursor.getString(cursor.getColumnIndex(CATEGORY_NAME)))
+                labels.add(cursor.getString(cursor.getColumnIndex(CATEGORY_NAME)))
 
             } while (cursor.moveToNext())
         }
         cursor.close()
         close()
 
-        val labelsList: ArrayList<CategoryModel> = labels
+        val labelsList: List<String> = labels
 
         return labelsList
     }

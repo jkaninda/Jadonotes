@@ -30,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jkantech.jadonotes.R
+import com.jkantech.jadonotes.ui.database.DBManagerCategory
 import com.jkantech.jadonotes.ui.models.Note
 import com.jkantech.jadonotes.ui.database.DBManagerNote
 import com.jkantech.jadonotes.ui.utils.NoteColorPicker
@@ -39,7 +40,7 @@ import kotlinx.android.synthetic.main.containt_note_detail.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
+class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.OnItemSelectedListener {
 
     companion object {
         val REQUEST_EDIT_NOTE = 1
@@ -63,6 +64,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
     lateinit var EdittextView: TextView
     lateinit var Editdate: TextView
     lateinit var Createdate: TextView
+    lateinit var categoryName:TextView
     lateinit var notecolor: FrameLayout
     lateinit var sendNote:String
     lateinit var imageView: ImageView
@@ -72,6 +74,12 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
     private lateinit var bottomBar:CardView
     lateinit var fontButton:AppCompatImageView
     val dbManager = DBManagerNote(this)
+    lateinit var spinner: Spinner
+    var category:String=""
+    lateinit var saveButton: AppCompatImageView
+
+
+
 
 
 
@@ -81,7 +89,6 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
     private lateinit var CardNote: CardView
     private var idColorNote: Int? = null
     private val TAG = "msg"
-
 
 
 
@@ -128,10 +135,10 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        note = intent.getParcelableExtra<Note>(EXTRA_NOTE)
+        note = intent.getParcelableExtra<Note>(EXTRA_NOTE)!!
         noteIndex = intent.getIntExtra(EXTRA_NOTE_INDEX, 1)
 
-        editnote = intent.getParcelableExtra<Note>(EXTRA_NOTE)
+        editnote = intent.getParcelableExtra<Note>(EXTRA_NOTE)!!
         editnoteIndex = intent.getIntExtra(EXTRA_NOTE_INDEX, -1)
 
 
@@ -150,6 +157,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         colorLayout = findViewById(R.id.colorLayout)
         CardNote = findViewById(R.id.card_color)
         bottomBar = findViewById(R.id.bottomBar)
+        categoryName=findViewById(R.id.categoryName)
 
 
         /*
@@ -169,7 +177,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
 
 
-
+        spinner = findViewById(R.id.spinnerCategory)
 
 
 
@@ -181,6 +189,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         EdittextView.setText(textView.text)
         Editdate.text = note.editdate
         Createdate.text = note.createdate
+        categoryName.text=note.category
 
 
         //Initialisation des couleurs
@@ -191,6 +200,8 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         colorFive = findViewById(R.id._5)
         micButton = findViewById(R.id.micButton)
         fontButton = findViewById(R.id.fontButton)
+        saveButton = findViewById(R.id.saveButton)
+
 
 
 
@@ -212,19 +223,20 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
 
 
-        colorButton.setOnClickListener{
+        colorButton.setOnClickListener {
             if (colorLayout.isVisible) {
 
                 colorLayout.visibility = GONE
 
             } else {
                 colorLayout.visibility = VISIBLE
-
-
-
+            }
+        }
+            saveButton.setOnClickListener{
+                saveNote()
             }
 
-    }
+
         EdittitleView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 Log.i(AddNotesActivity.TAG, "rien")
@@ -257,11 +269,8 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.activity_note_detail, menu)
-
-
-
-
-
+        val save = menu!!.findItem(R.id.action_save)
+       save.isVisible = !categoryName.isVisible
         return true
     }
 
@@ -390,6 +399,9 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
 
 
     private fun Editnote() {
+
+
+
         // note.title = EdittextView.text.toString()
         // note.text = EdittitleView.toString()
         //EdittitleView=note.text.toString()
@@ -404,6 +416,9 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         Editdate.visibility= GONE
         Createdate.visibility= GONE
         bottomBar.visibility= VISIBLE
+        categoryName.visibility= GONE
+
+        loadDataInSpinner()
 
 
         toolbar.setTitle(getString(R.string.editnote_title))
@@ -534,8 +549,13 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
     }
 
     override fun onBackPressed() {
-        saveNote()
-        super.onBackPressed()
+        if (colorLayout.isVisible){
+            colorLayout.visibility= GONE
+        }else {
+            saveNote()
+
+            super.onBackPressed()
+        }
     }
 
     override fun finish() {
@@ -633,11 +653,40 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener {
         CardNote.setCardBackgroundColor(Color.parseColor(cardColor))
 
     }
+    private fun loadDataInSpinner() {
+
+        val dbManager = DBManagerCategory(this)
+        var labels = dbManager.getListOfCategory()
+        if (labels.isEmpty()) {
+            val arrayList: ArrayList<String> = ArrayList()
+            arrayList.add(getString(R.string.no_category))
+            labels = arrayList
+        }
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, labels)
 
 
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+        spinner.onItemSelectedListener = this
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        val text: String = parent?.getItemAtPosition(position).toString()
+        category=text
 
 
-
+    }
 }
+
+
+
+
+
+
+
 
 

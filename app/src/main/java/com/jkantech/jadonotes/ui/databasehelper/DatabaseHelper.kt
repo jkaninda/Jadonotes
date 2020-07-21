@@ -4,9 +4,9 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.jkantech.jadonotes.ui.models.Note
+import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.utils.*
-
+import com.kobakei.ratethisapp.RateThisApp.onCreate
 
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -21,7 +21,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                     ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     CATEGORY_NAME + " TEXT); "
 
-    //private val DROP_CATEGORY_TABLE = "DROP TABLE IF EXISTS " + TABLE_CATEGORY
+    private val DROP_CATEGORY_TABLE = "DROP TABLE IF EXISTS " + TABLE_CATEGORY
 
     /****************** Note ******************/
 
@@ -34,11 +34,25 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                     EDIT_DATE + " TEXT, " +
                     CREATE_DATE + " TEXT, "+
                     NOTE_COLOR + " TEXT,"+
-                    TEXT_SIZE + " );"
+                    TEXT_SIZE + " INTEGER); "
+
+    private val DROP_NOTES_TABLE = "DROP TABLE IF EXISTS " + TABLE_NOTES
 
 
 
-   // private val DROP_NOTES_TABLE = "DROP TABLE IF EXISTS " + TABLE_NOTES
+    /**************** Category ****************/
+
+
+    private val CREATE_TASK_TABLE =
+        "CREATE TABLE IF NOT EXISTS " + TABLE_TASK + "(" +
+    ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+    TASK_DETAILS + " TEXT, " +
+    NOTIFY_TIME_MILL + " TEXT, " +
+    TASK_COMPLETED + " INTEGER); "
+
+    private val DROP_TASK_TABLE = "DROP TABLE IF EXISTS " + TABLE_TASK
+
+
 
 
 
@@ -46,40 +60,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
 
         db!!.execSQL(CREATE_CATEGORY_TABLE)
         db.execSQL(CREATE_NOTES_TABLE)
+        db.execSQL(CREATE_TASK_TABLE)
 
-        val cv = ContentValues()
-        cv.put(CATEGORY_NAME, "Personal")
-        db.insert(TABLE_CATEGORY, null, cv)
 
-        val cv1 = ContentValues()
-        cv1.put(CATEGORY_NAME, "Business")
-        db.insert(TABLE_CATEGORY, null, cv1)
-
-        val cv2 = ContentValues()
-        cv2.put(CATEGORY_NAME, "Insurance")
-        db.insert(TABLE_CATEGORY, null, cv2)
-
-        val cv3 = ContentValues()
-        cv3.put(CATEGORY_NAME, "Shopping")
-        db.insert(TABLE_CATEGORY, null, cv3)
-
-        val cv4 = ContentValues()
-        cv4.put(CATEGORY_NAME, "Banking")
-        db.insert(TABLE_CATEGORY, null, cv4)
-        insertDefaultNotes()
 
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTES)
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORY)
-        onCreate(db)
+            onCreate(db)
+        }
 
-    }
-
-    private fun insertDefaultNotes(){
-
-    }
 
 
 }

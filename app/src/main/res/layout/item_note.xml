@@ -29,6 +29,7 @@
             tools:ignore="UseCompoundDrawables">
 
             <ImageView
+                android:id="@+id/categoryName"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="05dp"

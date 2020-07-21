@@ -9,9 +9,13 @@
             android:icon="@drawable/ic_baseline_create"
             android:title="@string/add_note_title" />
         <item
-            android:id="@+id/all_note"
+            android:id="@+id/nav_all_note"
             android:icon="@drawable/ic_baseline_library_books"
             android:title="@string/all_notes" />
+
+        <item android:id="@+id/nav_category"
+            android:icon="@drawable/ic_baseline_category"
+            android:title="@string/all_category"/>
 
 
     </group>
@@ -52,8 +56,7 @@
         <item
             android:id="@+id/versionapp_nav"
             android:icon="@drawable/ic_baseline_info"
-            android:title="@string/app_version"
-            />
+            android:title="" />
     </group>
 
 

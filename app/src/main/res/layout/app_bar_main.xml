@@ -56,7 +56,6 @@
                     android:textAlignment="center"
                     android:textSize="16sp"/>
 
-
             </LinearLayout>
 
 
@@ -79,10 +78,6 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-
-
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notes_recycler_view"
         android:layout_width="match_parent"
@@ -90,6 +85,8 @@
         app:spanCount="2"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/item_note" />
+
+
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -101,7 +98,7 @@
         app:maxImageSize="50dp"
         android:src="@drawable/ic_baseline_add"
         android:tint="@color/white"
-        app:backgroundTint="@color/white"
+        app:backgroundTint="@color/seven"
         app:layout_anchor="@id/notes_recycler_view"
         app:layout_anchorGravity="bottom|right|end"
         android:contentDescription="TODO" />

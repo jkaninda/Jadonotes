@@ -2,8 +2,14 @@ package com.jkantech.jadonotes
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.*
+import android.app.Dialog
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -11,13 +17,12 @@ import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.GravityCompat
@@ -29,9 +34,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.jkantech.jadonotes.ui.adapters.NoteAdapter
-import com.jkantech.jadonotes.ui.models.Note
+import com.jkantech.jadonotes.ui.database.DBManagerCategory
 import com.jkantech.jadonotes.ui.database.DBManagerNote
+import com.jkantech.jadonotes.ui.models.Note
 import com.jkantech.jadonotes.ui.utils.MyPreferences
+import com.jkantech.jadonotes.ui.utils.toastMessage
 import com.jkantech.jadonotes.ui.views.*
 import com.kobakei.ratethisapp.RateThisApp
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -40,15 +47,17 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-
-
-class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var coordinatorLayout: CoordinatorLayout
     lateinit var adapter: NoteAdapter
     var notes: ArrayList<Note> = ArrayList()
-    private var gridLayoutManager: GridLayoutManager?=null
-    lateinit var dbManager: DBManagerNote
+    private var gridLayoutManager: GridLayoutManager? = null
+    private lateinit var dbManager: DBManagerNote
+    var  dbCategory = DBManagerCategory(this)
+    lateinit var navigationView:NavigationView
+    lateinit var note:Note
+
 
     var appTheme = 2
     lateinit var sharedPreferences: SharedPreferences
@@ -57,11 +66,12 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     private lateinit var toggle: ActionBarDrawerToggle
     var doubleTap = false
     private val TAG = "msg"
-    private val SPANCOUNT_KEY="current"
-    private var spanCount=2
-    var id:Int?=null
+    private val SPANCOUNT_KEY = "current"
+    private var spanCount = 2
+    var id: Int?=null
+    lateinit var no_notes:LinearLayout
 
-    private var recyclerView:RecyclerView? = null
+    private var recyclerView: RecyclerView? = null
 
 
     @SuppressLint("SimpleDateFormat")
@@ -80,26 +90,27 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         title = ""
+        id=Note[id]
 
-       // applyTheme()
-
+        // applyTheme()
+        firstOpen()
 
 
         dbManager = DBManagerNote(this)
-        notes = dbManager.getNotesList() as ArrayList<Note>
-        adapter = NoteAdapter(notes, this)
+        this.notes = dbManager.getNotesList()
+        test(true)
+        adapter = NoteAdapter(this.notes, this, this)
+
+
 
 
 
 
         drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-
-        val appversion = drawer.findViewById<TextView>(R.id.versionapp_nav)
+       // val appversion = drawer.findViewById<TextView>(R.id.versionapp_nav)
         val versionCode: Int = BuildConfig.VERSION_CODE
         val versionName: String = BuildConfig.VERSION_NAME
-
-
-
+        no_notes=findViewById(R.id.no_notes)
 
 
         toggle = ActionBarDrawerToggle(
@@ -112,22 +123,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         toggle.syncState()
 
 
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
-        /*
-*   Reccuperation de la date actuelle
-*/
-        val date = Calendar.getInstance().time
-        val heures = Date().hours
-        val minutes = Date().minutes
-
-        @SuppressLint("SimpleDateFormat")
-        val formatter = SimpleDateFormat(getString(R.string.date_format))
-        val edit_date = formatter.format(date).toString()
-        val create_date = formatter.format(date).toString()
-        val getheure = heures.toString() + ":" + minutes
-        val Createddate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
-        val Editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
+        navigationView.menu.findItem(R.id.versionapp_nav).title =
+            "Version: " + versionName
 
 
 
@@ -138,32 +137,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
 
 
-        if (notes.isEmpty()) {
-            val category = "Test"
 
 
 
-            notes.add(
-                    Note(
-                            0,
-
-                            getString(R.string.notemodeletitre),
-                            getString(R.string.notemodeleText), category,
-                            Editdate, Createddate, "#ffffff",1
-                    )
-            )
-
-
-
-
-
-
-        }
-
-
-
-
-        coordinatorLayout = findViewById<CoordinatorLayout>(R.id.coordinator_layout)
+        coordinatorLayout = findViewById(R.id.coordinator_layout)
 
         val fab = findViewById<FloatingActionButton>(R.id.create_note_fab)
         fab.setOnClickListener {
@@ -174,26 +151,54 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             getSpanCount()
 
         } else {
-            spanCount=3
+            spanCount = 3
 
         }
         rateApp()
 
 
 
-        recyclerView = findViewById<RecyclerView>(R.id.notes_recycler_view)
-        gridLayoutManager= GridLayoutManager(applicationContext,spanCount,LinearLayoutManager.VERTICAL,false)
-        recyclerView?.layoutManager=gridLayoutManager
+        recyclerView = findViewById(R.id.notes_recycler_view)
+        gridLayoutManager = GridLayoutManager(applicationContext, spanCount, LinearLayoutManager.VERTICAL, false)
+        recyclerView?.layoutManager = gridLayoutManager
         recyclerView?.setHasFixedSize(true)
 
         // recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView?.adapter = adapter
 
+/*
+
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                adapter.filter.filter(query)
+
+                return false
+           }
+
+
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+
+                return false
+            }
+
+
+
+
+
+
+        })
+
+ */
+
+
+
         NbNotes()
 
 
         //Afficher Masquer le FloactingAction
-        recyclerView!!.addOnScrollListener(object :RecyclerView.OnScrollListener(){
+        recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (dy > 0 && fab.visibility == VISIBLE) {
@@ -201,7 +206,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                     //title=getString(R.string.app_name)
 
                 } else if (dy < 0 && fab.visibility !== VISIBLE) {
-                    title=" "
+                    title = " "
                     fab.show()
 
 
@@ -211,10 +216,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         })
 
 
-
-
     }
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -224,7 +226,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         }
 
         when (requestCode) {
-            NoteDetailActivity.REQUEST_EDIT_NOTE ->processEditNoteResult(data)
+            NoteDetailActivity.REQUEST_EDIT_NOTE -> processEditNoteResult(data)
         }
 
 
@@ -236,10 +238,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             }
         }
     }
+
     override fun onClick(view: View) {
 
         if (view.tag != null) {
-             startEditNotesActivity(view.tag as Int)
+            startEditNotesActivity(view.tag as Int)
         } else {
             when (view.id) {
                 R.id.create_note_fab -> AddNote()
@@ -250,24 +253,36 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     }
 
 
-
-
-
-
-
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main,menu)
-        //val search = menu.findItem(R.id.action_search)
+        menuInflater.inflate(R.menu.menu_main, menu)
+        // val search = menu?.findItem(R.id.action_search)
 
-        //val search=menu.findItem(R.id.action_search)
-        //  val searchView = MenuItemCompat.getActionView(search) as SearchView
-        //   searchView.queryHint="Recherche..."
+        val searchmenu = menu!!.findItem(R.id.action_search)
+        if (searchmenu != null) {
+            val searchView = searchmenu.actionView as SearchView
+            searchView.queryHint=getString(R.string.searchhint)
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                  //  adapter.filter.filter(newText)
+
+                    return true
+                }
+
+
+            })
+
+
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
+        when (item.itemId) {
             R.id.action_settings -> {
                 val intent = (Intent(this, SettingsActivity::class.java))
                 startActivityForResult(intent, REQUEST_STYLE)
@@ -293,7 +308,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             R.id.action_contact -> {
                 val intent = Intent(
                         Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto","contact.jkantech@gmail.com", null)
+                        "mailto", "contact.jkantech@gmail.com", null)
                 )
                 val subject: String? = null
                 intent.putExtra(Intent.EXTRA_SUBJECT, subject)
@@ -359,22 +374,26 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
                 AddNote()
                 return true
             }
+            R.id.nav_category -> {
 
-            R.id.nav_settings->{
+                startActivity(Intent(this, CategoryActivity::class.java))
+            }
+
+            R.id.nav_settings -> {
                 val intent = (Intent(this, SettingsActivity::class.java))
                 startActivityForResult(intent, REQUEST_STYLE)
                 overridePendingTransition(
                         R.anim.activity_fade_in_animation,
                         R.anim.activity_fade_out_animation
                 )
-                        return true
+                return true
             }
-            R.id.nav_backup->{
+            R.id.nav_backup -> {
                 //toast(getString(R.string.backup_note_msg))
-                startActivity(Intent(this,BackupActivity::class.java))
+                startActivity(Intent(this, BackupActivity::class.java))
                 overridePendingTransition(
-                    R.anim.activity_fade_in_animation,
-                    R.anim.activity_fade_out_animation
+                        R.anim.activity_fade_in_animation,
+                        R.anim.activity_fade_out_animation
                 )
                 return true
             }
@@ -419,20 +438,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         return true
     }
 
-
-    private fun close() {
-
-
-    }
-
-
     fun processEditNoteResult(data: Intent) {
         val noteIndex = data.getIntExtra(NoteDetailActivity.EXTRA_NOTE_INDEX, -1)
 
-        when(data.action) {
+        when (data.action) {
             NoteDetailActivity.ACTION_SAVE -> {
                 val note = data.getParcelableExtra<Note>(NoteDetailActivity.EXTRA_NOTE)
-                saveNote(note, noteIndex)
+                saveNote(note!!, noteIndex)
                 NbNotes()
             }
             NoteDetailActivity.ACTION_DELETE -> {
@@ -447,42 +459,35 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     }
 
 
-
     fun saveNote(note: Note, noteIndex: Int) {
 
         if (noteIndex < 0) {
-            notes.add(0, note)
-            recyclerView?.setHasFixedSize(true)
-            recreate()
+            this.notes.add(0, note)
+            isAdded()
 
 
         } else {
-            notes[noteIndex] = note
+            this.notes[noteIndex] = note
 
 
         }
-
         adapter.notifyDataSetChanged()
 
     }
 
     fun deleteNote(noteIndex: Int) {
 
-        if (noteIndex <0) {
+        if (noteIndex < 0) {
             return
         }
-        val note = notes.removeAt(noteIndex)
+        val note = this.notes.removeAt(noteIndex)
         //com.jkantech.jadonotes.ui.utils.deleteNote(this, note)
 
         adapter.notifyDataSetChanged()
-        Snackbar.make(coordinatorLayout, "${note.title}" +" "+getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
-
+        Snackbar.make(coordinatorLayout, "${note.title}" + " " + getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
 
 
     }
-
-
-
 
 
     /*
@@ -495,7 +500,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     }
 
     fun startAddNotesActivity(noteIndex: Int) {
-        val note = if (noteIndex < 0) Note() else notes[noteIndex]
+        val note = if (noteIndex < 0) Note() else this.notes[noteIndex]
 
         val intent = Intent(this, AddNotesActivity::class.java)
         intent.putExtra(AddNotesActivity.EXTRA_NOTE, note as Parcelable)
@@ -517,7 +522,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
     }
 
     fun startEditNotesActivity(noteIndex: Int) {
-        val note = if (noteIndex < 0) Note() else notes[noteIndex]
+        val note = if (noteIndex < 0) Note() else this.notes[noteIndex]
 
         val intent = Intent(this, NoteDetailActivity::class.java)
         intent.putExtra(NoteDetailActivity.EXTRA_NOTE, note as Parcelable)
@@ -542,15 +547,35 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             }
         })
     }
+
+    /*
     private fun toast(message:String){
         Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
     }
+
+     */
     @SuppressLint("SetTextI18n")
-    private fun NbNotes(){
-        val nb=resources.getQuantityString(R.plurals.nb_notes,notes.size)
-        nb_notes.text= notes.size.toString()+" "+nb
+    private fun NbNotes() {
+        val getCategory=dbCategory.getListOfCategory()
+
+        val nb = resources.getQuantityString(R.plurals.nb_notes, this.notes.size)
+        nb_notes.text = this.notes.size.toString() + " " + nb
+        navigationView.menu.findItem(R.id.nav_all_note).title =getString(R.string.all_notes)+"             " + notes.size
+        navigationView.menu.findItem(R.id.nav_category).title =getString(R.string.all_category)+"            " + getCategory.size
+
+
+
+
+        if (this.notes.isEmpty()) {
+            no_notes.visibility= VISIBLE
+        }else{
+            no_notes.visibility= GONE
+        }
 
     }
+
+
+
     @SuppressLint("ResourceAsColor")
     private fun applyTheme() {
         when (MyPreferences(this).darkMode) {
@@ -576,6 +601,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         }
 
     }
+
     private fun applyStyle() {
 
         when (sharedPreferences.getInt(themeKey, 0)) {
@@ -586,11 +612,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             3 -> theme.applyStyle(R.style.Theme3, true)
 
         }
-
-
     }
-
-
 
 
     override fun onBackPressed() {
@@ -604,11 +626,11 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
             }
 
             this.doubleTap = true
-            toast( getString(R.string.press_again_to_exit))
-
+            toastMessage(this, getString(R.string.press_again_to_exit))
             Handler().postDelayed({ doubleTap = false }, 2000)
         }
     }
+
     private fun shareApp() {
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
@@ -616,29 +638,31 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         sendIntent.type = "text/plain"
         startActivity(Intent.createChooser(sendIntent, getString(R.string.send_to)))
     }
-    private fun getSpanCount(){
+
+    private fun getSpanCount() {
         when (sharedPreferences.getInt(SPANCOUNT_KEY, 2)) {
-            1->{
-                spanCount=1
-
-
-        }
-            2->{
-                spanCount=2
-
-            }
-
-            3->{
-                spanCount=3
+            1 -> {
+                spanCount = 1
 
 
             }
+            2 -> {
+                spanCount = 2
+
+            }
+
+            3 -> {
+                spanCount = 3
+
+
+            }
 
 
         }
 
-        }
-    private fun rateApp(){
+    }
+
+    private fun rateApp() {
         // Custom condition: 3 days and 2 launches
         val config = RateThisApp.Config(3, 4)
         RateThisApp.init(config)
@@ -655,10 +679,10 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
 
             override fun onYesClicked() {
                 startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
-                    )
+                        Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
+                        )
                 )
             }
 
@@ -670,13 +694,178 @@ class MainActivity : AppCompatActivity(),View.OnClickListener, NavigationView.On
         })
     }
 
-    companion object {
 
-       private val REQUEST_STYLE = 0
-       private val REQUEST_EDIT = 0
 
+
+    private fun isAdded() {
+        adapter.clearAdapter()
+
+        this.notes = dbManager.getNotesList()
+
+        adapter = NoteAdapter(this.notes, this, this)
+        recyclerView!!.adapter = adapter
+        adapter.notifyDataSetChanged()
+
+
+    }
+
+    private fun test(teste: Boolean = true) {
+        if (teste == true) {
+            this.notes.sortBy {
+                it.color
+            }
+        } else {
+            this.notes.sortBy {
+                it.id
+
+            }
+
+        }
+
+    }
+    private fun DeleteNoteDialog(){
+        val dialog= Dialog(this)
+        dialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.exit_dialog)
+            setCancelable(true)
+            val exit=dialog.findViewById<TextView>(R.id.exit_msg)
+            val confirm_btn=findViewById<Button>(R.id.confirm_btn)
+            val cancel=findViewById<Button>(R.id.cancel_btn)
+            exit.text=getString(R.string.delete_message)
+            confirm_btn.setOnClickListener {
+
+                // val note = if (noteIndex < 0) Note() else
+
+               dbManager.delete(id!!)
+                isAdded()
+
+
+
+                dismiss()
+            }
+            cancel.setOnClickListener {
+                dismiss()
+            }
+            show()
+
+
+        }
+    }
+
+    override fun onLongClick(v: View?): Boolean {
+        if (v!!.tag != null) {
+            val popupMenu = PopupMenu(this,v)
+            popupMenu.inflate(R.menu.note_detail_popmenu)
+            popupMenu.menu.getItem(0).title = getString(R.string.note_detail)
+            popupMenu.menu.getItem(1).title = getString(R.string.edit_note)
+            //popupMenu.menu.getItem(2).title = getString(R.string.delete_note)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.pop_detail -> {
+                        startEditNotesActivity(v.tag as Int)
+
+
+
+                        return@setOnMenuItemClickListener true
+                    }
+                    R.id.pop_edit -> {
+                        startEditNotesActivity(v.tag as Int)
+
+                        return@setOnMenuItemClickListener true
+                    }
+                    /*
+                    R.id.pop_delete -> {
+                      //  deleteNote(noteIndex)
+                        DeleteNoteDialog()
+
+
+
+                        return@setOnMenuItemClickListener true
+                    }
+
+                     */
+
+                }
+                false
+            }
+            popupMenu.show()
+        }
+
+
+        //startEditNotesActivity(view.tag as Int)
+
+return true
+    }
+
+
+    private fun firstOpen(){
+
+        val prefs =
+            getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        val firstStart = prefs.getBoolean("firstStart", true)
+        if (firstStart) {
+            addCategory()
+
+        }
     }
 
 
 
+
+    private fun addCategory(){
+        /*
+*   Reccuperation de la date actuelle
+*/
+        val date = Calendar.getInstance().time
+        val heures = Date().hours
+        val minutes = Date().minutes
+
+        @SuppressLint("SimpleDateFormat")
+        val formatter = SimpleDateFormat(getString(R.string.date_format))
+        val edit_date = formatter.format(date).toString()
+        val create_date = formatter.format(date).toString()
+        val getheure = heures.toString() + ":" + minutes
+        val Createddate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
+        val Editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
+
+
+
+
+         dbCategory = DBManagerCategory(this)
+        val getCategory=dbCategory.getListOfCategory()
+
+        if (getCategory.isEmpty()) {
+            dbCategory.insert(getString(R.string.cat_personal))
+            dbCategory.insert(getString(R.string.cat_business))
+            dbCategory.insert(getString(R.string.cat_insurance))
+            dbCategory.insert(getString(R.string.cat_school))
+            dbCategory.insert(getString(R.string.cat_work))
+        }
+        dbManager = DBManagerNote(this)
+        dbManager.insert(getString(R.string.notemodeletitre),getString(R.string.notemodeleText), getString(R.string.cat_business),Editdate, Createddate, "#ffffff",1)
+
+
+
+        val prefs =
+            getSharedPreferences("prefs", Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.putBoolean("firstStart", false)
+        editor.apply()
+
+
+
+    }
+
+
+    companion object {
+
+        private val REQUEST_STYLE = 0
+        private val REQUEST_EDIT = 0
+
+    }
 }
+
+
+
+

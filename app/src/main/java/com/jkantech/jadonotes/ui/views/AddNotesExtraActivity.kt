@@ -2,16 +2,13 @@ package com.jkantech.jadonotes.ui.views
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.text.Editable
@@ -31,29 +28,18 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.jkantech.jadonotes.MainActivity
 import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.database.DBManagerCategory
 import com.jkantech.jadonotes.ui.models.Note
 import com.jkantech.jadonotes.ui.database.DBManagerNote
 import com.jkantech.jadonotes.ui.utils.NoteColorPicker
-import kotlinx.android.synthetic.main.containt_add_notes.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.OnItemSelectedListener {
+class AddNotesExtraActivity : AppCompatActivity(),View.OnClickListener ,AdapterView.OnItemSelectedListener{
 
     companion object {
-        val REQUEST_EDIT_NOTE = 1
-        val REQUEST_ADD_NOTE = 1
-
-        val EXTRA_NOTE = "note"
-        val EXTRA_NOTE_INDEX = "noteIndex"
-
-        val ACTION_SAVE = "com.jkantech.jadonotes.actions.ACTION_SAVE"
-        val ACTION_DELETE = "com.jkantech.jadonotes.action.ACTION_DELETE"
         private val SPEECH_REC = 0
         const val TAG = "message"
 
@@ -62,13 +48,14 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
 
 
     lateinit var note: Note
-    var noteIndex: Int = -1
     lateinit var time: TextView
     lateinit var titleView: TextView
     lateinit var textView: TextView
     private lateinit var CardNote: CardView
     lateinit var notecolor: FrameLayout
     lateinit var spinner: Spinner
+
+
 
     val PERMISSION_RECORD_AUDIO = 0
 
@@ -92,7 +79,9 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
     lateinit var saveButton: AppCompatImageView
 
     lateinit var myCalendar: Calendar
-    var category: String? =null
+    var text_size=1
+    var category: String =""
+
 
 
     private var cardColor: String? = null
@@ -122,27 +111,19 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
         title = (getString(R.string.add_note_title))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        note = intent.getParcelableExtra<Note>(EXTRA_NOTE)!!
-        noteIndex = intent.getIntExtra(EXTRA_NOTE_INDEX, -1)
         time = findViewById(R.id.time)
 
         titleView = findViewById(R.id.title)
         textView = findViewById(R.id.text)
         CardNote = findViewById(R.id.card_color)
+        spinner = findViewById(R.id.spinnerCategory)
+        loadDataInSpinner()
 
-        titleView.text = note.title
-        textView.text = note.text
-        category=note.category
+
+        //titleView.text = note.title
+        //textView.text = note.text
 
         myCalendar = Calendar.getInstance()
-/*
-        val intent: Intent = getIntent()
-        val addnote: String = intent.getStringExtra("test")
-        if (addnote!=null){
-            textView.text=addnote
-        }
-
- */
 
 
         /*
@@ -161,7 +142,7 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
         //val taille:Int=t
         time.text = hour
 
-        applyTextSize()
+       getSendText(intent)
 
 
         //Initialisation des couleurs
@@ -188,11 +169,6 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
         micButton.setOnClickListener(this)
         fontButton.setOnClickListener(this)
         saveButton.setOnClickListener(this)
-
-
-        spinner = findViewById(R.id.spinnerCategory)
-         loadDataInSpinner()
-
 
 
         //application du couleur du CardView par defaud
@@ -244,75 +220,39 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
 
 
     private fun saveNote() {
-        note.title = titleView.text.toString()
-        note.text = textView.text.toString()
-        note.editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
-        note.createdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
-        note.color = "#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
+       val  title = titleView.text.toString()
+        val text = textView.text.toString()
+        val editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
+        val createdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
+        val color = "#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
         val dbManager = DBManagerNote(this)
 
-        if (note.title!!.trim() == "" && note.text!!.trim() == "") {
+        if (title.trim() == "" && text.trim() == "") {
             // toast("Aucune note à sauvegarder")
             finish()
 
         } else {
-            intent = Intent(ACTION_SAVE)
-            intent.putExtra(EXTRA_NOTE, note as Parcelable)
-            intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
+
             //toast(getString(R.string.note_saved))
-            dbManager.insert(note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size)
+            dbManager.insert(title, text, category, editdate, createdate, color,text_size)
 
-
-            setResult(Activity.RESULT_OK, intent)
             finish()
         }
     }
 
-    private fun saveNoteAuto() {
-        note.title = titleView.text.toString()
-        note.text = textView.text.toString()
-        note.editdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
-        note.createdate = getString(R.string.create_date) + " " + create_date + " " + getString(R.string.edit_at) + " " + getheure
-        note.color = "#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
-        val dbManager = DBManagerNote(this)
-
-
-
-
-        if (note.title!!.trim() == "" && note.text!!.trim() == "") {
-
-            finish()
-
-        } else {
-            intent = Intent(ACTION_SAVE)
-            intent.putExtra(EXTRA_NOTE, note as Parcelable)
-            intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
-            dbManager.insert(note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size)
-
-
-
-
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-        }
-    }
 
 
     fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
     override fun onSupportNavigateUp(): Boolean {
-        saveNoteAuto()
+        saveNote()
         return true
     }
 
     override fun onBackPressed() {
-        if (colorLayout.isVisible){
-            colorLayout.visibility= GONE
-        }else {
-            saveNoteAuto()
-            super.onBackPressed()
-        }
+        saveNote()
+        super.onBackPressed()
     }
 
 
@@ -422,33 +362,6 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
 
     }
 
-
-    private fun applyTextSize() {
-        when (note.text_size) {
-
-            1 -> {
-                titleView.textSize = 22f
-                textView.textSize = 18f
-
-            }
-            2 -> {
-                titleView.textSize = 27f
-                textView.textSize = 22f
-
-
-            }
-            3 -> {
-                titleView.textSize = 30f
-                textView.textSize = 26f
-
-            }
-
-
-
-
-        }
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK || data == null) {
@@ -537,7 +450,7 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
                 R.id.action_small_text -> {
                     titleView.textSize = 22f
                     textView.textSize = 18f
-                    note.text_size=1
+                    text_size=1
 
 
                     return@setOnMenuItemClickListener true
@@ -545,13 +458,13 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
                 R.id.action_medium_text -> {
                     titleView.textSize = 27f
                     textView.textSize = 22f
-                    note.text_size=2
+                    text_size=2
                     return@setOnMenuItemClickListener true
                 }
                 R.id.action_large_text -> {
                     titleView.textSize = 30f
                     textView.textSize = 26f
-                    note.text_size=3
+                    text_size=3
                     return@setOnMenuItemClickListener true
                 }
 
@@ -560,6 +473,13 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
         }
         popupMenu.show()
     }
+    private fun getSendText(intent: Intent) {
+        val notes=intent.getStringExtra(Intent.EXTRA_TEXT)
+        if (notes!=null) {
+            textView.text = notes
+        }
+    }
+
 
     private fun loadDataInSpinner() {
 
@@ -584,13 +504,12 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val text: String = parent?.getItemAtPosition(position).toString()
-        note.category=text
+        category=text
 
 
     }
-
-
 }
+
 
 
 

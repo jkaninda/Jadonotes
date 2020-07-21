@@ -50,5 +50,10 @@ class Note(
         override fun newArray(size: Int): Array<Note?> {
             return arrayOfNulls(size)
         }
+
+        operator fun get(id: Int?): Int? {
+            return id
+
+        }
     }
 }

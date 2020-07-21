@@ -70,7 +70,7 @@ class DBManagerNote(val context: Context) {
 
 
     /**
-     * delete row in task table
+     * delete row in Note table
      */
     fun delete(id: Int) {
         open()
@@ -79,14 +79,15 @@ class DBManagerNote(val context: Context) {
     }
 
     /**
-     * get task list from Task table
+     * get Notes list from Note table
      */
 
-    fun getNotesList(): MutableList<Note> {
+
+    fun getNotesList(): ArrayList<Note> {
 
         open()
 
-        val notes = mutableListOf<Note>()
+        val notes = ArrayList<Note>()
 
         val query = "SELECT * FROM " + TABLE_NOTES
          database.rawQuery(query, null).use {cursor->

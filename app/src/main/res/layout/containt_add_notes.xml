@@ -32,15 +32,31 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/itim"
                 android:textSize="15sp"/>
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                tools:ignore="RtlHardcoded" />
+
+
+
+
+                <Spinner
+                    android:id="@+id/spinnerCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_toLeftOf="@+id/imgAddCategory" />
+
+                <ImageView
+                    android:id="@+id/imgAddCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_playlist_add_24"
+                    android:tint="@color/colorAccent"
+                    android:visibility="gone"
+                    android:contentDescription="TODO" />
+
+
 
         </LinearLayout>
 
-      >
+
 
         <EditText
             android:id="@+id/title"

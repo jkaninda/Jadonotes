@@ -22,6 +22,8 @@
 
 
 
+    <include
+        layout="@layout/no_notes"/>
 
 
 
