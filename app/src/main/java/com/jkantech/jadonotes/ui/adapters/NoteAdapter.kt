@@ -15,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.models.Note
 import java.util.*
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 
 class NoteAdapter(private var notes: ArrayList<Note>, private val itemClickListener: View.OnClickListener,val longClickListener: View.OnLongClickListener)
     : RecyclerView.Adapter<NoteAdapter.ViewHolder>(),Filterable {

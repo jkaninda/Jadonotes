@@ -1,5 +1,7 @@
 package com.jkantech.jadonotes.ui.utils
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 import com.jkantech.jadonotes.R
 
 class NoteColorPicker {

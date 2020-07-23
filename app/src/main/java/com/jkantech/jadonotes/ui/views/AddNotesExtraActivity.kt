@@ -36,7 +36,9 @@ import com.jkantech.jadonotes.ui.utils.NoteColorPicker
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class AddNotesExtraActivity : AppCompatActivity(),View.OnClickListener ,AdapterView.OnItemSelectedListener{
 
     companion object {
@@ -234,7 +236,7 @@ class AddNotesExtraActivity : AppCompatActivity(),View.OnClickListener ,AdapterV
         } else {
 
             //toast(getString(R.string.note_saved))
-            dbManager.insert(title, text, category, editdate, createdate, color,text_size)
+            dbManager.insert(title, text, category, editdate, createdate, color,text_size,0)
 
             finish()
         }

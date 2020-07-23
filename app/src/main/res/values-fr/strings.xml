@@ -18,6 +18,10 @@
         <item>Configuration système</item>
     </string-array>
     <string name="delete_message">Êtes-vous sûr de supprimer cette note ?</string>
+    <string name="delete_forever"> Êtes-vous sûr de supprimer définitivement cette note? </string>
+    <string name="restore_message">Êtes-vous sûr de restaurer cette note? </string>
+
+
     <string name="action_annuler">Annuler</string>
     <string name="a_propos">À propos</string>
 
@@ -106,5 +110,12 @@
     <string name="cat_work">Travail</string>
     <string name="pas_de_notes">Pas de Notes</string>
     <string name="searchhint">Recherche…</string>
+    <string name="trash">Corbeille</string>
+    <string name="restore">Restaurer</string>
+    <string name="delete_cat">Voulez-vous supprimer cette catégorie?</string>
+    <string name="no_changed">Aucune modification à apporter</string>
+    <string name="please_enter_cat">Veuillez entrer le nom de la catégorie svp</string>
+    <string name="no_deleted_note">Aucune note n’a été supprimée</string>
+
 
 </resources>

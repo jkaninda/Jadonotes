@@ -45,7 +45,9 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 
 class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -90,7 +92,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         title = ""
-        id=Note[id]
 
         // applyTheme()
         firstOpen()
@@ -106,8 +107,9 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
 
 
 
+
+
         drawer = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-       // val appversion = drawer.findViewById<TextView>(R.id.versionapp_nav)
         val versionCode: Int = BuildConfig.VERSION_CODE
         val versionName: String = BuildConfig.VERSION_NAME
         no_notes=findViewById(R.id.no_notes)
@@ -166,31 +168,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
         // recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView?.adapter = adapter
 
-/*
-
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                adapter.filter.filter(query)
-
-                return false
-           }
-
-
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.filter.filter(newText)
-
-                return false
-            }
-
-
-
-
-
-
-        })
-
- */
 
 
 
@@ -237,6 +214,17 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
 
             }
         }
+        when(requestCode) {
+            DeletedNoteActivity.REQUEST_RESTORE_NOTE-> {
+
+                isAdded()
+                NbNotes()
+
+            }
+
+
+        }
+
     }
 
     override fun onClick(view: View) {
@@ -255,7 +243,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
-        // val search = menu?.findItem(R.id.action_search)
 
         val searchmenu = menu!!.findItem(R.id.action_search)
         if (searchmenu != null) {
@@ -378,6 +365,16 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
 
                 startActivity(Intent(this, CategoryActivity::class.java))
             }
+            R.id.nav_deletednote->{
+                val intent = (Intent(this, DeletedNoteActivity::class.java))
+                startActivityForResult(intent, DeletedNoteActivity.REQUEST_RESTORE_NOTE)
+                overridePendingTransition(
+                    R.anim.activity_fade_in_animation,
+                    R.anim.activity_fade_out_animation
+                )
+                return true
+
+            }
 
             R.id.nav_settings -> {
                 val intent = (Intent(this, SettingsActivity::class.java))
@@ -481,7 +478,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
             return
         }
         val note = this.notes.removeAt(noteIndex)
-        //com.jkantech.jadonotes.ui.utils.deleteNote(this, note)
 
         adapter.notifyDataSetChanged()
         Snackbar.make(coordinatorLayout, "${note.title}" + " " + getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
@@ -557,11 +553,15 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
     @SuppressLint("SetTextI18n")
     private fun NbNotes() {
         val getCategory=dbCategory.getListOfCategory()
+        val getdeletedNote=dbManager.getDeletedNotesList()
+
 
         val nb = resources.getQuantityString(R.plurals.nb_notes, this.notes.size)
         nb_notes.text = this.notes.size.toString() + " " + nb
         navigationView.menu.findItem(R.id.nav_all_note).title =getString(R.string.all_notes)+"             " + notes.size
         navigationView.menu.findItem(R.id.nav_category).title =getString(R.string.all_category)+"            " + getCategory.size
+        navigationView.menu.findItem(R.id.nav_deletednote).title =getString(R.string.trash)+"            " + getdeletedNote.size
+
 
 
 
@@ -701,7 +701,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
         adapter.clearAdapter()
 
         this.notes = dbManager.getNotesList()
-
         adapter = NoteAdapter(this.notes, this, this)
         recyclerView!!.adapter = adapter
         adapter.notifyDataSetChanged()
@@ -723,7 +722,25 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
         }
 
     }
-    private fun DeleteNoteDialog(){
+
+
+    fun deleteNotePopMenu(noteIndex: Int) {
+
+        if (noteIndex < 0) {
+            return
+        }
+        //val note = this.notes.removeAt(noteIndex)
+        val note = this.notes.removeAt(noteIndex)
+        dbManager.update(note.id!!,note.title!!,note.text!!,note.category!!,note.editdate!!,note.createdate!!,note.color!!,
+            note.text_size,1)
+        Snackbar.make(coordinatorLayout, "${note.title}" + " " + getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
+
+
+        adapter.notifyDataSetChanged()
+
+
+    }
+    private fun DeleteNoteDialog(v: View?){
         val dialog= Dialog(this)
         dialog.apply {
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -734,10 +751,8 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
             val cancel=findViewById<Button>(R.id.cancel_btn)
             exit.text=getString(R.string.delete_message)
             confirm_btn.setOnClickListener {
-
-                // val note = if (noteIndex < 0) Note() else
-
-               dbManager.delete(id!!)
+                deleteNotePopMenu(v!!.tag as Int)
+                NbNotes()
                 isAdded()
 
 
@@ -759,7 +774,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
             popupMenu.inflate(R.menu.note_detail_popmenu)
             popupMenu.menu.getItem(0).title = getString(R.string.note_detail)
             popupMenu.menu.getItem(1).title = getString(R.string.edit_note)
-            //popupMenu.menu.getItem(2).title = getString(R.string.delete_note)
+            popupMenu.menu.getItem(2).title = getString(R.string.delete_note)
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.pop_detail -> {
@@ -774,17 +789,13 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
 
                         return@setOnMenuItemClickListener true
                     }
-                    /*
+
                     R.id.pop_delete -> {
-                      //  deleteNote(noteIndex)
-                        DeleteNoteDialog()
-
-
-
+                       DeleteNoteDialog(v)
                         return@setOnMenuItemClickListener true
                     }
 
-                     */
+
 
                 }
                 false
@@ -793,7 +804,6 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
         }
 
 
-        //startEditNotesActivity(view.tag as Int)
 
 return true
     }
@@ -843,9 +853,19 @@ return true
             dbCategory.insert(getString(R.string.cat_work))
         }
         dbManager = DBManagerNote(this)
-        dbManager.insert(getString(R.string.notemodeletitre),getString(R.string.notemodeleText), getString(R.string.cat_business),Editdate, Createddate, "#ffffff",1)
+        if (notes.isEmpty()) {
+            dbManager.insert(
+                getString(R.string.notemodeletitre),
+                getString(R.string.notemodeleText),
+                getString(R.string.cat_business),
+                Editdate,
+                Createddate,
+                "#ffffff",
+                1,
+                0
+            )
 
-
+        }
 
         val prefs =
             getSharedPreferences("prefs", Context.MODE_PRIVATE)
@@ -861,6 +881,8 @@ return true
     companion object {
 
         private val REQUEST_STYLE = 0
+        private val REQUEST_RESTORE = 0
+
         private val REQUEST_EDIT = 0
 
     }

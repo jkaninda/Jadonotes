@@ -10,17 +10,20 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.models.CategoryModel
-import com.jkantech.jadonotes.ui.utils.delete
 import kotlin.collections.ArrayList
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 
-class CategoryAdapter(val context: Context,private val categories: ArrayList<CategoryModel>)
+class CategoryAdapter(val context: Context,private val categories: ArrayList<CategoryModel>,val itemClickListener:View.OnClickListener)
     : RecyclerView.Adapter<CategoryAdapter.ViewHolder>(),Filterable {
 
 
      class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+         //val cardView:CardView=itemView.findViewById(R.id.card_cat_item)
          val imgEditCategory: ImageView = itemView.findViewById(R.id.imgEditCategory)
          val imgDeleteCategory: ImageView = itemView.findViewById(R.id.imgDeleteCategory)
-         val txtCategoryName = itemView.findViewById<TextView>(R.id.txtCategoryName)
+         val txtCategoryName:TextView = itemView.findViewById(R.id.txtCategoryName)
 
      }
 
@@ -42,15 +45,13 @@ class CategoryAdapter(val context: Context,private val categories: ArrayList<Cat
     @SuppressLint("Range")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.txtCategoryName.text = categories[position].categoryName
-        holder.imgEditCategory.setOnClickListener{
-
-        }
-        holder.imgDeleteCategory.setOnClickListener{
-            delete(context, categories[position].id!!)
-            notifyDataSetChanged()
+        holder.imgEditCategory.setOnClickListener(itemClickListener)
+        holder.imgDeleteCategory.setOnClickListener(itemClickListener)
+        holder.imgEditCategory.tag = position
+        holder.imgDeleteCategory.tag = position
 
 
-        }
+
 
     }
 

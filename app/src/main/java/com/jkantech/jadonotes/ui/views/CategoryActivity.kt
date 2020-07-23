@@ -1,38 +1,40 @@
 package com.jkantech.jadonotes.ui.views
 
+import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
+import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.adapters.CategoryAdapter
-import com.jkantech.jadonotes.ui.adapters.NoteAdapter
 import com.jkantech.jadonotes.ui.database.DBManagerCategory
 import com.jkantech.jadonotes.ui.models.CategoryModel
 import com.jkantech.jadonotes.ui.utils.toastMessage
 import kotlinx.android.synthetic.main.activity_category.*
 import kotlinx.android.synthetic.main.containt_category.*
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class CategoryActivity : AppCompatActivity() ,View.OnClickListener{
 
     lateinit var categoryadapter: CategoryAdapter
     var categorylist:ArrayList<CategoryModel> = ArrayList()
     var dbManager = DBManagerCategory(this)
     lateinit var recyclerView: RecyclerView
-    lateinit var category:CategoryModel
-    lateinit var fabAddCategory:FloatingActionButton
-    var id:Int?=null
-
+    private val themeKey = "currentTheme"
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var imgDeleteCategory:ImageView
 
 
 
@@ -40,6 +42,11 @@ class CategoryActivity : AppCompatActivity() ,View.OnClickListener{
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences = getSharedPreferences(
+            "ThemePref",
+            Context.MODE_PRIVATE
+        )
+        applyStyle()
         setContentView(R.layout.activity_category)
         setSupportActionBar(toolbar)
         title = (getString(R.string.all_category))
@@ -47,48 +54,51 @@ class CategoryActivity : AppCompatActivity() ,View.OnClickListener{
 
 
         categorylist= dbManager.getCategoryList()
-        fabAddCategory=findViewById(R.id.fabAddCategory)
+        //fabAddCategory=findViewById(R.id.fabAddCategory)
         fabAddCategory.setOnClickListener(this)
 
-        categoryadapter= CategoryAdapter(applicationContext,categorylist)
-         recyclerView = findViewById<RecyclerView>(R.id.recyclerViewCategory)
+        categoryadapter= CategoryAdapter(this,categorylist,this)
+         recyclerView = findViewById(R.id.recyclerViewCategory)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = categoryadapter
 
-        if (categorylist.isEmpty()) {
-            txtNoCategory.visibility=VISIBLE
-        }
 
 
 
     }
 
     override fun onClick(v: View?) {
-        if (v != null) {
-            when (v.id) {
-                /*
-                R.id.imgEditCategory -> {
-                    dialogUpdateCategory(this, category.id!!)
-                    Toast.makeText(this, "Edition", Toast.LENGTH_SHORT).show()
-                }
+        /*
+        if (v!!.tag != null) {
+            //deleteCat(v.tag as Int)
 
 
+        } else {
 
-                 */
-
-                    // Toast.makeText(this, "Deleted", Toast.LENGTH_SHORT).show()
-
-
-
-                R.id.fabAddCategory ->{
+         */
+            when (v!!.id) {
+                R.id.fabAddCategory -> {
                     dialogAddCategory()
                 }
+                R.id.imgEditCategory->{
+                    dialogUpdateCategory(v.tag as Int)
+                   // dbManager.update(v.tag as Int, "Kaninda")
 
+
+                }
+                R.id.imgDeleteCategory->{
+                    DeleteCatDialog(v)
+
+
+
+
+                }
 
             }
 
-        }
+
+
     }
     fun dialogAddCategory() {
 
@@ -124,8 +134,7 @@ class CategoryActivity : AppCompatActivity() ,View.OnClickListener{
 
                     alertDialog.dismiss()
                 } else {
-                    toastMessage(this, getString(R.string.no_category))
-                    alertDialog.dismiss()
+                    toastMessage(this, getString(R.string.please_enter_cat))
                 }
             }
         }
@@ -135,34 +144,37 @@ class CategoryActivity : AppCompatActivity() ,View.OnClickListener{
     private fun isAdded() {
         categoryadapter.clearAdapter()
         categorylist= dbManager.getCategoryList()
-
-        categoryadapter= CategoryAdapter(applicationContext,categorylist)
+        categoryadapter= CategoryAdapter(applicationContext,categorylist,this)
         recyclerView.adapter=categoryadapter
         categoryadapter.notifyDataSetChanged()
 
-
-
-
+        if (categorylist.isEmpty()) {
+            txtNoCategory.visibility=VISIBLE
+        }
 
     }
 
 
 
-    fun dialogUpdateCategory(context: Context, id: Int) {
+    fun dialogUpdateCategory(id: Int) {
 
-        val dbManager = DBManagerCategory(context)
-        val catName = dbManager.getCategoryName(id)
+        val dbManager = DBManagerCategory(this)
+        //val catName = dbManager.getCategoryName(id)
+        val category= this.categorylist[id]
+        //val Name= this.categorylist[id]
+        val test=category.id
 
-        val li = LayoutInflater.from(context)
+
+        val li = LayoutInflater.from(this)
         val promptsView = li.inflate(R.layout.alert_dialog_update_category, null)
 
-        val alert = AlertDialog.Builder(context)
+        val alert = AlertDialog.Builder(this)
         alert.setView(promptsView)
 
         val input: EditText = promptsView.findViewById(R.id.edtUpdateCat) as EditText
 
-        input.setText(catName)
-        input.setSelection(input.text.length)
+        input.setText(category.categoryName)
+       input.setSelection(input.text.length)
 
         alert.setPositiveButton(R.string.update) { _, _ -> }
 
@@ -174,31 +186,70 @@ class CategoryActivity : AppCompatActivity() ,View.OnClickListener{
             val button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
             button.setOnClickListener {
 
-                val cat: String = input.text.toString().trim()
+                val cat: String = input.text.toString()
 
-                Log.e(ContentValues.TAG, "Category : " + cat)
+                when {
+                    cat.trim()=="" -> {
 
-                if (cat != "") {
-                    if (cat != catName) {
 
-                        dbManager.update(id, cat)
+                        toastMessage(this, getString(R.string.please_enter_cat))
 
-                        val mArrayList = dbManager.getCategoryList()
 
-                        alertDialog.dismiss()
-                    } else {
-                        toastMessage(context, "Modifiaction")
                     }
-                } else {
-                    //toastMessage(context, context.getString(R.string.please_enter_something_to_update))
-                    toastMessage(context, "Veillez entrer pour modifier")
+                    cat==category.categoryName -> {
+                        toastMessage(this, getString(R.string.no_changed))
+
+                    }
+                    else -> {
+
+
+                        dbManager.update(test!!, cat)
+                        alertDialog.dismiss()
+                        isAdded()
+
+
+                    }
                 }
+
             }
         }
 
         alertDialog.show()
     }
 
+    fun deleteCat(noteIndex: Int) {
+
+
+       val category= this.categorylist.removeAt(noteIndex)
+        categoryadapter.notifyDataSetChanged()
+        category.id?.let { dbManager.delete(it) }
+
+    }
+    private fun DeleteCatDialog(v: View?) {
+        val dialog = Dialog(this)
+        dialog.apply {
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.exit_dialog)
+            setCancelable(true)
+            val exit = dialog.findViewById<TextView>(R.id.exit_msg)
+            val confirm_btn = findViewById<Button>(R.id.confirm_btn)
+            val cancel = findViewById<Button>(R.id.cancel_btn)
+            exit.text = getString(R.string.delete_cat)
+            confirm_btn.setOnClickListener {
+                deleteCat(v!!.tag as Int)
+                dismiss()
+                isAdded()
+
+
+            }
+            cancel.setOnClickListener {
+                dismiss()
+            }
+            show()
+
+
+        }
+    }
 
 
 
@@ -208,6 +259,18 @@ class CategoryActivity : AppCompatActivity() ,View.OnClickListener{
         onBackPressed()
         return super.onSupportNavigateUp()
     }
+    private fun applyStyle() {
 
+        when (sharedPreferences.getInt(themeKey, 0)) {
+
+            0 -> theme.applyStyle(R.style.Theme_JadoNotes, true)
+            1 -> theme.applyStyle(R.style.Theme1, true)
+            2 -> theme.applyStyle(R.style.Theme2, true)
+            3 -> theme.applyStyle(R.style.Theme3, true)
+
+        }
+
+
+    }
 
 }

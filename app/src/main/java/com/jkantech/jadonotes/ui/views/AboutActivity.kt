@@ -10,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jkantech.jadonotes.BuildConfig
 import com.jkantech.jadonotes.R
 import kotlinx.android.synthetic.main.activity_about.*
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class AboutActivity : AppCompatActivity(), View.OnClickListener {
     var appTheme=2
     lateinit var sharedPreferences: SharedPreferences

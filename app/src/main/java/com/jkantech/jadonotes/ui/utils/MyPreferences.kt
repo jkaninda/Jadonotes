@@ -2,7 +2,9 @@ package com.jkantech.jadonotes.ui.utils
 
 import android.content.Context
 import android.preference.PreferenceManager
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class MyPreferences(context: Context?) {
     companion object {
 

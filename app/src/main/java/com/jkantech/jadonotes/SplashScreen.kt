@@ -9,8 +9,11 @@ import android.os.Handler
 import androidx.appcompat.app.AppCompatDelegate
 import com.jkantech.jadonotes.ui.utils.MyPreferences
 import kotlinx.android.synthetic.main.activity_splash_screen.*
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class SplashScreen : AppCompatActivity() {
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)

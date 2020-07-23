@@ -39,7 +39,9 @@ import kotlinx.android.synthetic.main.containt_add_notes.*
 import kotlinx.android.synthetic.main.containt_note_detail.*
 import java.text.SimpleDateFormat
 import java.util.*
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.OnItemSelectedListener {
 
     companion object {
@@ -362,7 +364,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.
             //cardColor = "#" + (ContextCompat.getColor(this, colorId!!))
             cardColor = "#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
             note.color = cardColor
-            dbManager.update(note.id!!,note.title!!, note.text!!,  "Exemple", note.editdate!!, note.createdate!!, note.color!!,note.text_size)
+            dbManager.update(note.id!!,note.title!!, note.text!!,  note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0)
 
         }else {
 
@@ -386,11 +388,11 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.
         when (note.id) {
 
             0 -> {
-                dbManager.insert( note.title!!, note.text!!, "Exemple", note.editdate!!, note.createdate!!, note.color!!,note.text_size)
+                dbManager.insert( note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0)
 
 
             }
-            else -> dbManager.update(note.id!!, note.title!!, note.text!!, "Exemple", note.editdate!!, note.createdate!!, note.color!!,note.text_size)
+            else -> dbManager.update(note.id!!, note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0)
         }
 
 
@@ -464,7 +466,8 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.
         intent = Intent(ACTION_DELETE)
         intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
         setResult(Activity.RESULT_OK, intent)
-        dbManager.delete(note.id!!)
+        dbManager.update(note.id!!,note.title!!, note.text!!,  note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,1)
+
         finish()
     }
     fun Context.toast(message:String){

@@ -9,15 +9,18 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.jkantech.jadonotes.R
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class BackupActivity : AppCompatActivity(),View.OnClickListener {
 
     var appTheme=2
-    lateinit var sharedPreferences: SharedPreferences
     lateinit var backup_text:Button
     lateinit var backup_notes:Button
 
     private val themeKey = "currentTheme"
+    lateinit var sharedPreferences: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +44,7 @@ class BackupActivity : AppCompatActivity(),View.OnClickListener {
     }
 
 
-    private fun applyStyle() {
 
-        when (sharedPreferences.getInt(themeKey, 0)) {
-
-            0 -> theme.applyStyle(R.style.Theme_JadoNotes, true)
-            1 -> theme.applyStyle(R.style.Theme1, true)
-            2 -> theme.applyStyle(R.style.Theme2, true)
-            3 -> theme.applyStyle(R.style.Theme3, true)
-
-        }
-
-
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
@@ -80,5 +71,19 @@ class BackupActivity : AppCompatActivity(),View.OnClickListener {
                 }
             }
         }
+    }
+
+    private fun applyStyle() {
+
+        when (sharedPreferences.getInt(themeKey, 0)) {
+
+            0 -> theme.applyStyle(R.style.Theme_JadoNotes, true)
+            1 -> theme.applyStyle(R.style.Theme1, true)
+            2 -> theme.applyStyle(R.style.Theme2, true)
+            3 -> theme.applyStyle(R.style.Theme3, true)
+
+        }
+
+
     }
 }

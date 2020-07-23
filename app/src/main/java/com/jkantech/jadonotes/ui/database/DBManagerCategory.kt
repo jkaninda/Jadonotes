@@ -12,7 +12,7 @@ import com.jkantech.jadonotes.ui.utils.TABLE_CATEGORY
 
 
 /**
- * Created by Pinkal on 25/5/17.
+ * Created by jkantech on 10/07/2020.
  */
 class DBManagerCategory(val context: Context) {
 
@@ -137,4 +137,6 @@ class DBManagerCategory(val context: Context) {
 
         return labelsList
     }
+
+
 }

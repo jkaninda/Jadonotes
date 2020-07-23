@@ -26,7 +26,9 @@ import com.jkantech.jadonotes.ui.utils.MyPreferences
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.containt_settings.*
 import java.util.*
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class SettingsActivity : AppCompatActivity() {
     var appTheme=2
      lateinit var sharedPreferences: SharedPreferences

@@ -1,6 +1,8 @@
 package com.jkantech.jadonotes.ui.utils
 
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 
 /******************* Play *****************/
 
@@ -12,7 +14,7 @@ val APP_PACKAGE_NAME = "com.jkantech.jadonotes"
 /***************  Database  ***************/
 
 val DB_NAME = "Note.db"
-val DB_VERSION = 2
+val DB_VERSION = 3
 
 
 /***************  Category  ****************/
@@ -39,6 +41,7 @@ val EDIT_DATE = "editdate"
 val CREATE_DATE = "createdate"
 val NOTE_COLOR="notecolor"
 val TEXT_SIZE="text_size"
+val ISDELETED="isdeleted"
 
 
 

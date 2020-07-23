@@ -8,6 +8,9 @@ import com.jkantech.jadonotes.ui.databasehelper.DatabaseHelper
 import com.jkantech.jadonotes.ui.models.Note
 import com.jkantech.jadonotes.ui.utils.*
 
+/**
+ * Created by jkantech on 10/07/2020.
+ */
 
 class DBManagerNote(val context: Context) {
 
@@ -28,7 +31,7 @@ class DBManagerNote(val context: Context) {
     /**
      * insert value in task table
      */
-    fun insert(title: String, text: String, category: String,  editedate: String ,createdate: String ,notecolor:String,text_size:Int) {
+    fun insert(title: String, text: String, category: String,  editedate: String ,createdate: String ,notecolor:String,text_size:Int,isdeleted:Int) {
         open()
 
         val contentValues = ContentValues()
@@ -39,6 +42,7 @@ class DBManagerNote(val context: Context) {
         contentValues.put(CREATE_DATE, createdate)
         contentValues.put(NOTE_COLOR, notecolor)
         contentValues.put(TEXT_SIZE,text_size)
+        contentValues.put(ISDELETED,isdeleted)
 
 
 
@@ -50,7 +54,7 @@ class DBManagerNote(val context: Context) {
     /**
      * update value in task table
      */
-    fun update(id: Int, title: String, text: String, category: String, editedate: String, createdate: String, notecolor:String,text_size: Int) {
+    fun update(id: Int, title: String, text: String, category: String, editedate: String, createdate: String, notecolor:String,text_size: Int,isdeleted: Int) {
         open()
 
         val contentValues = ContentValues()
@@ -62,6 +66,7 @@ class DBManagerNote(val context: Context) {
         contentValues.put(CREATE_DATE, createdate)
         contentValues.put(NOTE_COLOR, notecolor)
         contentValues.put(TEXT_SIZE,text_size)
+        contentValues.put(ISDELETED,isdeleted)
 
 
         database.update(TABLE_NOTES, contentValues, ID + " = " + id, null)
@@ -89,7 +94,7 @@ class DBManagerNote(val context: Context) {
 
         val notes = ArrayList<Note>()
 
-        val query = "SELECT * FROM " + TABLE_NOTES
+        val query = "SELECT * FROM " + TABLE_NOTES + " "+ "WHERE isdeleted=0 OR isdeleted IS NULL"
          database.rawQuery(query, null).use {cursor->
              while (cursor.moveToNext()) {
 
@@ -103,7 +108,8 @@ class DBManagerNote(val context: Context) {
                          cursor.getString(cursor.getColumnIndex(EDIT_DATE)),
                          cursor.getString(cursor.getColumnIndex(CREATE_DATE)),
                          cursor.getString(cursor.getColumnIndex(NOTE_COLOR)),
-                         cursor.getInt(cursor.getColumnIndex(TEXT_SIZE))
+                         cursor.getInt(cursor.getColumnIndex(TEXT_SIZE)),
+                         cursor.getInt(cursor.getColumnIndex(ISDELETED))
 
 
 
@@ -113,6 +119,47 @@ class DBManagerNote(val context: Context) {
 
 
              }
+
+        }
+        return notes
+    }
+
+    /**
+     * get Notes list from Note table
+     */
+
+
+    fun getDeletedNotesList(): ArrayList<Note> {
+
+        open()
+
+        val notes = ArrayList<Note>()
+
+        val query = "SELECT * FROM " + TABLE_NOTES + " "+ "WHERE isdeleted=1"
+        database.rawQuery(query, null).use {cursor->
+            while (cursor.moveToNext()) {
+
+
+                val note = Note(
+                    //  user.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
+                    cursor.getInt(cursor.getColumnIndex(ID)),
+                    cursor.getString(cursor.getColumnIndex(NOTE_TITLE)),
+                    cursor.getString(cursor.getColumnIndex(NOTE_TEXT)),
+                    cursor.getString(cursor.getColumnIndex(NOTE_CATEGORY)),
+                    cursor.getString(cursor.getColumnIndex(EDIT_DATE)),
+                    cursor.getString(cursor.getColumnIndex(CREATE_DATE)),
+                    cursor.getString(cursor.getColumnIndex(NOTE_COLOR)),
+                    cursor.getInt(cursor.getColumnIndex(TEXT_SIZE)),
+                    cursor.getInt(cursor.getColumnIndex(ISDELETED))
+
+
+
+                )
+
+                notes.add(note)
+
+
+            }
 
         }
         return notes

@@ -17,6 +17,9 @@
         <item>Automático</item>
     </string-array>
     <string name="delete_message">Deseja excluir esta nota? </string>
+    <string name="delete_forever">Deseja excluir esta nota para sempre?</string>
+    <string name="restore_message">Certifique-se de restaurar esta nota?</string>
+
     <string name="action_annuler">Cancelar</string>
     <string name="a_propos">Sobre </string>
 
@@ -86,10 +89,10 @@
     <string name="speech_not_available">O reconhecedor de fala não está disponível neste dispositivo</string>
     <string name="max_title_characters">Número máximo de caracteres (50) atingido.</string>
     <string name="add_note_extra">Adicionar nota</string>
-    <string name="update">Update</string>
-    <string name="cancel">Cancel</string>
-    <string name="add">Add</string>
-    <string name="no_category">No category added</string>
+    <string name="update">Atualizar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="add">Adicionar</string>
+    <string name="no_category">Nenhuma categoria adicionada </string>
     <string name="add_category">Add category</string>
     <string name="enter_category">Enter category</string>
     <string name="update_category">Update category</string>
@@ -98,8 +101,14 @@
     <string name="cat_insurance">Insurance</string>
     <string name="cat_school">School</string>
     <string name="cat_work">Work</string>
-    <string name="pas_de_notes">Pas de Notes</string>
+    <string name="pas_de_notes">Sem notas</string>
     <string name="searchhint">Search…</string>
+    <string name="trash">Trash</string>
+    <string name="restore">Restaurar</string>
+    <string name="delete_cat">Deseja excluir esta categoria?</string>
+    <string name="no_changed">Nenhuma alteração a ser feita</string>
+    <string name="please_enter_cat">Digite o nome da categoria</string>
+    <string name="no_deleted_note">Nenhuma nota foi apagada</string>
 
 
 </resources>

@@ -1,14 +1,13 @@
 package com.jkantech.jadonotes.ui.databasehelper
 
-import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.utils.*
-import com.kobakei.ratethisapp.RateThisApp.onCreate
 
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
 
 
@@ -34,7 +33,8 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                     EDIT_DATE + " TEXT, " +
                     CREATE_DATE + " TEXT, "+
                     NOTE_COLOR + " TEXT,"+
-                    TEXT_SIZE + " INTEGER); "
+                    TEXT_SIZE + " INTEGER ,"+
+                    ISDELETED + " INTEGER); "
 
     private val DROP_NOTES_TABLE = "DROP TABLE IF EXISTS " + TABLE_NOTES
 
@@ -67,8 +67,19 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-            onCreate(db)
+
+        if (oldVersion <= 2) {
+            db.execSQL("ALTER TABLE NOTES ADD COLUMN isdeleted INT NOT NULL DEFAULT 0 ")
+
+        }else{
+           // onCreate(db)
+            db.execSQL(DROP_NOTES_TABLE)
+            db.execSQL(DROP_CATEGORY_TABLE)
+            db.execSQL(DROP_TASK_TABLE)
+
         }
+
+    }
 
 
 

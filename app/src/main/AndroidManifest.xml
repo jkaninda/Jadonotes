@@ -22,7 +22,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JadoNotes">
-        <activity android:name=".ui.views.AddNotesExtraActivity"
+        <activity android:name=".ui.views.DeletedNoteActivity"></activity>
+        <activity
+            android:name=".ui.views.AddNotesExtraActivity"
             android:label="@string/add_note_extra"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -32,7 +34,6 @@
 
                 <data android:mimeType="text/plain" />
             </intent-filter>
-
         </activity>
         <activity android:name=".ui.views.CategoryActivity" />
         <activity android:name=".ui.views.BackupActivity" />
@@ -42,8 +43,7 @@
         <activity
             android:name=".ui.views.AddNotesActivity"
             android:label="@string/add_note_title"
-            android:windowSoftInputMode="adjustResize"/>
-
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.views.NoteDetailActivity"
             android:windowSoftInputMode="adjustResize">

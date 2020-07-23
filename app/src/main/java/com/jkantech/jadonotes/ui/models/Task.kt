@@ -1,5 +1,7 @@
 package com.jkantech.jadonotes.ui.models
-
+/**
+ * Created by Jonas Kaninda on 10/07/2020.
+ */
 import android.os.Parcel
 import android.os.Parcelable
 
