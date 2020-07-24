@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_note_item"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:clickable="true"
     app:cardBackgroundColor="@color/notecolor"
     android:layout_marginBottom="5dp"
     android:layout_marginTop="5dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
-    app:cardCornerRadius="10sp"
+    app:cardCornerRadius="12dp"
     android:foreground="?android:attr/selectableItemBackground"
     android:focusable="true">
 
@@ -21,40 +21,87 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/note_cat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:maxLength="20"
+                android:text="Cat"
+                android:fontFamily="@font/itim"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/imgNoteFav"
+                style="@style/SelectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:tint="?colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/imgNoteMore"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                android:focusable="true" />
+
+            <ImageView
+                android:id="@+id/imgNoteMore"
+                style="@style/SelectableItemBackground"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:tint="?colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_baseline_more_vert_24"
+                tools:ignore="VectorDrawableCompat"
+                android:focusable="true" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout
             android:id="@+id/titre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_below="@+id/img"
             tools:ignore="UseCompoundDrawables">
-
-            <ImageView
-                android:id="@+id/categoryName"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginStart="05dp"
-                android:src="@drawable/pin"
-                tools:ignore="RtlHardcoded"
-                android:contentDescription="TODO" />
             <TextView
-                android:id="@+id/note_cat"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"/>
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:textAlignment="textStart"
-            android:text="Titre"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#000000"
-            tools:ignore="RelativeOverlap"
-            android:gravity="start"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAlignment="textStart"
+                android:text="Titre"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:fontFamily="@font/open_sans"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#000000"
+                tools:ignore="RelativeOverlap"
+                android:gravity="start"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
+
+
+
 
         </LinearLayout>
 
@@ -63,7 +110,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Note"
-            android:maxLines="3"
+            android:ellipsize="end"
+            android:maxLines="5"
+            android:textSize="14sp"
             android:layout_below="@id/titre"
             android:fontFamily="@font/open_sans"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -93,6 +142,13 @@
             android:textColor="#3A3939"
             android:layout_marginLeft="05dp"
             android:layout_marginRight="05dp"/>
+
+            <ImageView
+                android:id="@+id/note_locked"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:contentDescription="@string/img_description"
+                tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
 

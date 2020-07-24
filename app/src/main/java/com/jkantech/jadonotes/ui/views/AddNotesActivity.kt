@@ -262,7 +262,7 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
             intent.putExtra(EXTRA_NOTE, note as Parcelable)
             intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
             //toast(getString(R.string.note_saved))
-            dbManager.insert(note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0)
+            dbManager.insert(note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0,0,0)
 
 
             setResult(Activity.RESULT_OK, intent)
@@ -289,7 +289,7 @@ class AddNotesActivity : AppCompatActivity(),View.OnClickListener,AdapterView.On
             intent = Intent(ACTION_SAVE)
             intent.putExtra(EXTRA_NOTE, note as Parcelable)
             intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
-            dbManager.insert(note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0)
+            dbManager.insert(note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0,0,0)
 
 
 

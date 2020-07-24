@@ -109,6 +109,11 @@
     <string name="no_changed">Nenhuma alteração a ser feita</string>
     <string name="please_enter_cat">Digite o nome da categoria</string>
     <string name="no_deleted_note">Nenhuma nota foi apagada</string>
+    <string name="edit_add_to_fav">Adicionar aos favoritos</string>
+    <string name="remove_to_fav">Remover dos favoritos</string>
+    <string name="favorites">Favoritos</string>
+    <string name="locked_notes">Notas bloqueadas</string>
+    <string name="lock_note">Bloquear</string>
 
 
 </resources>

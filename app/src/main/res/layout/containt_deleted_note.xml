@@ -17,7 +17,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/no_deleted_note"
         android:visibility="gone"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

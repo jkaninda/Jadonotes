@@ -4,6 +4,11 @@
 
 
 
+    <item android:id="@+id/action_fav"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_star_border_24"
+        android:orderInCategory="1"
+        android:title="@string/edit_add_to_fav" />
 
     <item android:id="@+id/action_save"
         app:showAsAction="always"

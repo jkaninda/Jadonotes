@@ -112,6 +112,11 @@
     <string name="no_changed">No changes to make</string>
     <string name="please_enter_cat">Please enter the name of the category</string>
     <string name="no_deleted_note">No note was deleted</string>
+    <string name="edit_add_to_fav">Add to Favorites</string>
+    <string name="remove_to_fav">Remove from Favorites</string>
+    <string name="favorites">Favorites</string>
+    <string name="locked_notes">Locked notes</string>
+    <string name="lock_note">Lock</string>
 
 
 </resources>

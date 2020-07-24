@@ -236,7 +236,7 @@ class AddNotesExtraActivity : AppCompatActivity(),View.OnClickListener ,AdapterV
         } else {
 
             //toast(getString(R.string.note_saved))
-            dbManager.insert(title, text, category, editdate, createdate, color,text_size,0)
+            dbManager.insert(title, text, category, editdate, createdate, color,text_size,0,0,0)
 
             finish()
         }

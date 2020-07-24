@@ -14,7 +14,7 @@ val APP_PACKAGE_NAME = "com.jkantech.jadonotes"
 /***************  Database  ***************/
 
 val DB_NAME = "Note.db"
-val DB_VERSION = 3
+val DB_VERSION = 4
 
 
 /***************  Category  ****************/
@@ -42,6 +42,8 @@ val CREATE_DATE = "createdate"
 val NOTE_COLOR="notecolor"
 val TEXT_SIZE="text_size"
 val ISDELETED="isdeleted"
+val FAVORITE="favorite"
+val ISLOCKED="islocked"
 
 
 

@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
@@ -17,6 +18,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.jkantech.jadonotes.R
 import com.jkantech.jadonotes.ui.adapters.NoteAdapter
 import com.jkantech.jadonotes.ui.database.DBManagerNote
@@ -26,10 +28,10 @@ import kotlinx.android.synthetic.main.containt_deleted_note.*
 /**
  * Created by Jonas Kaninda on 10/07/2020.
  */
-class DeletedNoteActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickListener {
+class FavoritesNoteActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickListener {
     lateinit var note: Note
     var dbManager = DBManagerNote(this)
-    var deletednotes: ArrayList<Note> = ArrayList()
+    var favnotes: ArrayList<Note> = ArrayList()
     lateinit var adapter:NoteAdapter
     lateinit var recyclerView:RecyclerView
     lateinit var gridLayoutManager:GridLayoutManager
@@ -47,14 +49,14 @@ class DeletedNoteActivity : AppCompatActivity(),View.OnClickListener,View.OnLong
         applyStyle()
         setContentView(R.layout.activity_deleted_note)
         setSupportActionBar(toolbar)
-        title=(getString(R.string.trash))
+        title=(getString(R.string.favorites))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         dbManager = DBManagerNote(this)
-        this.deletednotes = dbManager.getDeletedNotesList()
-        adapter = NoteAdapter(this.deletednotes,this,this)
+        this.favnotes = dbManager.getFavNotesList()
+        adapter = NoteAdapter(this.favnotes,this,this)
 
-checkView()
+        checkView()
 
 
 
@@ -64,16 +66,15 @@ checkView()
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.setHasFixedSize(true)
 
-        // recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
     }
 
     override fun onClick(v: View?) {
-        showPopMenu(v)
+        showPopMenu(v!!,v.tag as Int)
     }
 
     override fun onLongClick(v: View?): Boolean {
-        showPopMenu(v)
+        showPopMenu(v!!,v.tag as Int)
         return true
     }
     private fun DeleteNoteDialog(v: View?) {
@@ -85,12 +86,11 @@ checkView()
             val exit = dialog.findViewById<TextView>(R.id.exit_msg)
             val confirm_btn = findViewById<Button>(R.id.confirm_btn)
             val cancel = findViewById<Button>(R.id.cancel_btn)
-            exit.text = getString(R.string.delete_forever)
+            exit.text = getString(R.string.delete_message)
             confirm_btn.setOnClickListener {
 
                 deleteNote(v!!.tag as Int)
 
-
                 dismiss()
             }
             cancel.setOnClickListener {
@@ -101,33 +101,7 @@ checkView()
 
         }
     }
-    private fun RestoreNoteDialog(v: View?) {
-        val dialog = Dialog(this)
-        dialog.apply {
-            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setContentView(R.layout.exit_dialog)
-            setCancelable(true)
-            val exit = dialog.findViewById<TextView>(R.id.exit_msg)
-            val confirm_btn = findViewById<Button>(R.id.confirm_btn)
-            val cancel = findViewById<Button>(R.id.cancel_btn)
-            exit.text = getString(R.string.restore_message)
-            confirm_btn.setOnClickListener {
-                restoreNote(v!!.tag as Int)
 
-
-
-
-
-                dismiss()
-            }
-            cancel.setOnClickListener {
-                dismiss()
-            }
-            show()
-
-
-        }
-    }
 
 
     fun deleteNote(noteIndex: Int) {
@@ -135,21 +109,24 @@ checkView()
         if (noteIndex < 0) {
             return
         }
-        //val note = this.notes.removeAt(noteIndex)
-        val note = this.deletednotes.removeAt(noteIndex)
-        note.id?.let { dbManager.delete(it) }
+        val note = this.favnotes.removeAt(noteIndex)
+        dbManager.update(note.id!!,note.title!!,note.text!!,note.category!!,note.editdate!!,note.createdate!!,note.color!!,
+                note.text_size,1,0,0)
+
+
+        adapter.notifyDataSetChanged()
 
         adapter.notifyDataSetChanged()
         checkView()
 
 
     }
-    fun restoreNote(noteIndex: Int) {
+    fun RemoveFromFavNote(noteIndex: Int) {
 
         if (noteIndex < 0) {
             return
         }
-        val note = this.deletednotes.removeAt(noteIndex)
+        val note = this.favnotes.removeAt(noteIndex)
         dbManager.update(note.id!!,note.title!!,note.text!!,note.category!!,note.editdate!!,note.createdate!!,note.color!!,
             note.text_size,0,0,0)
 
@@ -161,7 +138,8 @@ checkView()
     }
     fun checkView(){
 
-        if (deletednotes.isEmpty()) {
+        if (favnotes.isEmpty()) {
+            txtNoDeletednotes.text=getString(R.string.pas_de_notes)
             txtNoDeletednotes.visibility= View.VISIBLE
         }
     }
@@ -188,34 +166,57 @@ fun actionRestore(){
     setResult(Activity.RESULT_OK, intent)
     finish()
 }
-fun showPopMenu(v: View?){
-    if (v!!.tag != null) {
-        val popupMenu = PopupMenu(this,v)
-        popupMenu.inflate(R.menu.menu_restore)
-        popupMenu.menu.getItem(0).title = getString(R.string.restore)
-        popupMenu.menu.getItem(1).title = getString(R.string.delete_note)
+    private fun showPopMenu(view:View,id:Int){
+        val note = this.favnotes[id]
+
+        val popupMenu = PopupMenu(this, view)
+        popupMenu.inflate(R.menu.note_fav_popmenu)
+        popupMenu.menu.getItem(0).title = getString(R.string.note_detail)
+        popupMenu.menu.getItem(1).title = getString(R.string.remove_to_fav)
+
+        popupMenu.menu.getItem(2).title = getString(R.string.delete_note)
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.itemId) {
-                R.id.pop_restore -> {
-                    RestoreNoteDialog(v)
+                R.id.pop_detail -> {
+                   startEditNotesActivity(view.tag as Int)
 
 
 
                     return@setOnMenuItemClickListener true
                 }
+                R.id.pop_add_to_fav->{
+                    RemoveFromFavNote(view.tag as Int)
+                    checkView()
+
+
+                }
+
                 R.id.pop_delete -> {
-                    DeleteNoteDialog(v)
+                    DeleteNoteDialog(view)
                     return@setOnMenuItemClickListener true
                 }
-
 
 
             }
             false
         }
         popupMenu.show()
+
     }
-}
+    fun startEditNotesActivity(noteIndex: Int) {
+        val note = if (noteIndex < 0) Note() else this.favnotes[noteIndex]
+
+        val intent = Intent(this, NoteDetailActivity::class.java)
+        intent.putExtra(NoteDetailActivity.EXTRA_NOTE, note as Parcelable)
+        intent.putExtra(NoteDetailActivity.EXTRA_NOTE_INDEX, noteIndex)
+        startActivityForResult(intent, NoteDetailActivity.REQUEST_EDIT_NOTE)
+        overridePendingTransition(
+                R.anim.activity_fade_in_animation,
+                R.anim.activity_fade_out_animation
+        )
+        finish()
+    }
+
 
     private fun applyStyle() {
 
@@ -233,6 +234,8 @@ fun showPopMenu(v: View?){
     companion object {
         val REQUEST_RESTORE_NOTE = 1
         val ACTION_RESTORE = "com.jkantech.jadonotes.actions.ACTION_RESTORE"
+        val REQUEST_EDIT_NOTE = 1
+
 
 
     }

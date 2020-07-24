@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -273,12 +274,33 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.
         menuInflater.inflate(R.menu.activity_note_detail, menu)
         val save = menu!!.findItem(R.id.action_save)
        save.isVisible = !categoryName.isVisible
+       val fav = menu.findItem(R.id.action_fav)
+       // val fav:MenuItem=menu.findItem(R.id.action_fav)
+            if (note.favorite==1){
+                fav.setIcon(R.drawable.ic_baseline_star)
+                note.favorite=1
+            }else{
+                fav.setIcon(R.drawable.ic_baseline_star_border_24)
+                note.favorite=0
+
+
+
+
+        }
+
         return true
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+
+
+            R.id.action_fav->{
+               // val fav = menu.findItem(R.id.action_fav)
+
+
+            }
             R.id.action_save -> {
                 saveNote()
                 // toast(getString(R.string.note_edited))
@@ -364,7 +386,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.
             //cardColor = "#" + (ContextCompat.getColor(this, colorId!!))
             cardColor = "#" + Integer.toHexString(ContextCompat.getColor(this, colorId!!))
             note.color = cardColor
-            dbManager.update(note.id!!,note.title!!, note.text!!,  note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0)
+            dbManager.update(note.id!!,note.title!!, note.text!!,  note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0,note.favorite!!,0)
 
         }else {
 
@@ -388,11 +410,11 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.
         when (note.id) {
 
             0 -> {
-                dbManager.insert( note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0)
+                dbManager.insert( note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0,note.favorite!!,0)
 
 
             }
-            else -> dbManager.update(note.id!!, note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0)
+            else -> dbManager.update(note.id!!, note.title!!, note.text!!, note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,0,note.favorite!!,0)
         }
 
 
@@ -466,7 +488,7 @@ class NoteDetailActivity : AppCompatActivity(),View.OnClickListener,AdapterView.
         intent = Intent(ACTION_DELETE)
         intent.putExtra(EXTRA_NOTE_INDEX, noteIndex)
         setResult(Activity.RESULT_OK, intent)
-        dbManager.update(note.id!!,note.title!!, note.text!!,  note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,1)
+        dbManager.update(note.id!!,note.title!!, note.text!!,  note.category!!, note.editdate!!, note.createdate!!, note.color!!,note.text_size,1,note.favorite!!,0)
 
         finish()
     }

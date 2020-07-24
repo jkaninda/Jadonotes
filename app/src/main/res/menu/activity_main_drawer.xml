@@ -16,9 +16,12 @@
         <item android:id="@+id/nav_category"
             android:icon="@drawable/ic_baseline_category"
             android:title="@string/all_category"/>
-        <item android:id="@+id/nav_deletednote"
-            android:icon="@drawable/ic_baseline_delete"
-            android:title="@string/trash"/>
+        <item android:id="@+id/nav_favorites"
+            android:icon="@drawable/ic_baseline_star"
+            android:title="@string/favorites"/>
+        <item android:id="@+id/nav_locked"
+            android:icon="@drawable/ic_baseline_lock_24"
+            android:title="@string/locked_notes"/>
 
 
     </group>
@@ -26,6 +29,9 @@
     <group
         android:id="@+id/drawer_item"
         android:checkableBehavior="none">
+        <item android:id="@+id/nav_deletednote"
+            android:icon="@drawable/ic_baseline_delete"
+            android:title="@string/trash"/>
 
     <item
                 android:id="@+id/nav_backup"

@@ -116,6 +116,11 @@
     <string name="no_changed">Aucune modification à apporter</string>
     <string name="please_enter_cat">Veuillez entrer le nom de la catégorie svp</string>
     <string name="no_deleted_note">Aucune note n’a été supprimée</string>
+    <string name="edit_add_to_fav">Ajouter aux Favoris</string>
+    <string name="remove_to_fav">Retirer des favoris</string>
+    <string name="favorites">Favoris</string>
+    <string name="locked_notes">Notes verrouillées</string>
+    <string name="lock_note">Verrouiller cette note</string>
 
 
 </resources>

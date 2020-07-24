@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.JadoNotes">
-        <activity android:name=".ui.views.DeletedNoteActivity"></activity>
+        <activity android:name=".ui.views.DeletedNoteActivity" />
         <activity
             android:name=".ui.views.AddNotesExtraActivity"
             android:label="@string/add_note_extra"
@@ -40,6 +40,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".ui.views.SettingsActivity" />
         <activity android:name=".ui.views.AboutActivity" />
+        <activity android:name=".ui.views.FavoritesNoteActivity"/>
         <activity
             android:name=".ui.views.AddNotesActivity"
             android:label="@string/add_note_title"

@@ -6,16 +6,8 @@
         android:title="Afficher"
         />
     <item
-        android:id="@+id/pop_edit"
-        android:title="@string/edit_note"
-        />
-    <item
         android:id="@+id/pop_add_to_fav"
         android:title="@string/edit_add_to_fav"
-        />
-    <item
-        android:id="@+id/pop_lock_note"
-        android:title="@string/lock_note"
         />
 
     <item android:id="@+id/pop_delete"

@@ -34,7 +34,9 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
                     CREATE_DATE + " TEXT, "+
                     NOTE_COLOR + " TEXT,"+
                     TEXT_SIZE + " INTEGER ,"+
-                    ISDELETED + " INTEGER); "
+                    ISDELETED + " INTEGER, "+
+                    FAVORITE + " INTEGER, "+
+                    ISLOCKED + " INTEGER);"
 
     private val DROP_NOTES_TABLE = "DROP TABLE IF EXISTS " + TABLE_NOTES
 
@@ -68,15 +70,24 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
 
-        if (oldVersion <= 2) {
-            db.execSQL("ALTER TABLE NOTES ADD COLUMN isdeleted INT NOT NULL DEFAULT 0 ")
+        when {
+            oldVersion <= 2 -> {
+                db.execSQL("ALTER TABLE NOTES ADD COLUMN isdeleted INT NOT NULL DEFAULT 0 ")
+                db.execSQL("ALTER TABLE NOTES ADD COLUMN favorite INT NOT NULL DEFAULT 0 ")
+                db.execSQL("ALTER TABLE NOTES ADD COLUMN islocked INT NOT NULL DEFAULT 0 ")
+            }
+            oldVersion==3 -> {
+                db.execSQL("ALTER TABLE NOTES ADD COLUMN favorite INT NOT NULL DEFAULT 0 ")
+                db.execSQL("ALTER TABLE NOTES ADD COLUMN islocked INT NOT NULL DEFAULT 0 ")
 
-        }else{
-           // onCreate(db)
-            db.execSQL(DROP_NOTES_TABLE)
-            db.execSQL(DROP_CATEGORY_TABLE)
-            db.execSQL(DROP_TASK_TABLE)
+            }
+            else -> {
+                // onCreate(db)
+                db.execSQL(DROP_NOTES_TABLE)
+                db.execSQL(DROP_CATEGORY_TABLE)
+                db.execSQL(DROP_TASK_TABLE)
 
+            }
         }
 
     }

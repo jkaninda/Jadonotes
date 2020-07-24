@@ -228,15 +228,18 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
     }
 
     override fun onClick(view: View) {
+        when (view.id) {
+            R.id.card_note_item -> {
+                startEditNotesActivity(view.tag as Int)
 
-        if (view.tag != null) {
-            startEditNotesActivity(view.tag as Int)
-        } else {
-            when (view.id) {
-                R.id.create_note_fab -> AddNote()
             }
+            R.id.create_note_fab -> {
+                AddNote()
+            }
+            R.id.imgNoteMore -> {
+                showPopMenu(view,view.tag as Int)
 
-
+            }
         }
     }
 
@@ -364,7 +367,23 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
             R.id.nav_category -> {
 
                 startActivity(Intent(this, CategoryActivity::class.java))
+                return true
             }
+            R.id.nav_favorites -> {
+
+                val intent = (Intent(this, FavoritesNoteActivity::class.java))
+                startActivityForResult(intent, FavoritesNoteActivity.REQUEST_RESTORE_NOTE)
+                overridePendingTransition(
+                        R.anim.activity_fade_in_animation,
+                        R.anim.activity_fade_out_animation
+                )
+                return true
+            }
+            R.id.nav_locked->{
+                toastMessage(this,getString(R.string.backup_note_msg))
+                return true
+            }
+
             R.id.nav_deletednote->{
                 val intent = (Intent(this, DeletedNoteActivity::class.java))
                 startActivityForResult(intent, DeletedNoteActivity.REQUEST_RESTORE_NOTE)
@@ -554,12 +573,16 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
     private fun NbNotes() {
         val getCategory=dbCategory.getListOfCategory()
         val getdeletedNote=dbManager.getDeletedNotesList()
+        val getFavNote=dbManager.getFavNotesList()
+        val getLockedNote=dbManager.getLockedNotesList()
 
 
         val nb = resources.getQuantityString(R.plurals.nb_notes, this.notes.size)
         nb_notes.text = this.notes.size.toString() + " " + nb
         navigationView.menu.findItem(R.id.nav_all_note).title =getString(R.string.all_notes)+"             " + notes.size
         navigationView.menu.findItem(R.id.nav_category).title =getString(R.string.all_category)+"            " + getCategory.size
+        navigationView.menu.findItem(R.id.nav_favorites).title =getString(R.string.favorites)+"            " + getFavNote.size
+        navigationView.menu.findItem(R.id.nav_locked).title =getString(R.string.locked_notes)+"            " + getLockedNote.size
         navigationView.menu.findItem(R.id.nav_deletednote).title =getString(R.string.trash)+"            " + getdeletedNote.size
 
 
@@ -722,6 +745,36 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
         }
 
     }
+    private fun addToFav(noteIndex: Int){
+
+            if (noteIndex < 0) {
+                return
+            }
+            //val note = this.notes.removeAt(noteIndex)
+            val note = this.notes.removeAt(noteIndex)
+            dbManager.update(note.id!!,note.title!!,note.text!!,note.category!!,note.editdate!!,note.createdate!!,note.color!!,
+                    note.text_size,0,1,0)
+          //  Snackbar.make(coordinatorLayout, "${note.title}" + " " + getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
+
+
+            adapter.notifyDataSetChanged()
+
+        }
+    private fun removFromFav(noteIndex: Int){
+
+        if (noteIndex < 0) {
+            return
+        }
+        //val note = this.notes.removeAt(noteIndex)
+        val note = this.notes.removeAt(noteIndex)
+        dbManager.update(note.id!!,note.title!!,note.text!!,note.category!!,note.editdate!!,note.createdate!!,note.color!!,
+                note.text_size,0,0,0)
+        //  Snackbar.make(coordinatorLayout, "${note.title}" + " " + getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
+
+
+        adapter.notifyDataSetChanged()
+
+    }
 
 
     fun deleteNotePopMenu(noteIndex: Int) {
@@ -732,7 +785,7 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
         //val note = this.notes.removeAt(noteIndex)
         val note = this.notes.removeAt(noteIndex)
         dbManager.update(note.id!!,note.title!!,note.text!!,note.category!!,note.editdate!!,note.createdate!!,note.color!!,
-            note.text_size,1)
+            note.text_size,1,0,0)
         Snackbar.make(coordinatorLayout, "${note.title}" + " " + getString(R.string.note_deleted), Snackbar.LENGTH_SHORT).show()
 
 
@@ -770,42 +823,67 @@ class MainActivity : AppCompatActivity(),View.OnClickListener,View.OnLongClickLi
 
     override fun onLongClick(v: View?): Boolean {
         if (v!!.tag != null) {
-            val popupMenu = PopupMenu(this,v)
-            popupMenu.inflate(R.menu.note_detail_popmenu)
-            popupMenu.menu.getItem(0).title = getString(R.string.note_detail)
-            popupMenu.menu.getItem(1).title = getString(R.string.edit_note)
-            popupMenu.menu.getItem(2).title = getString(R.string.delete_note)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.pop_detail -> {
-                        startEditNotesActivity(v.tag as Int)
+            showPopMenu(v,v.tag as Int)
+
+        }
+return true
+    }
+    private fun showPopMenu(view:View,id:Int){
+        val note = this.notes[id]
+
+        val popupMenu = PopupMenu(this, view)
+        popupMenu.inflate(R.menu.note_detail_popmenu)
+        popupMenu.menu.getItem(0).title = getString(R.string.note_detail)
+        popupMenu.menu.getItem(1).title = getString(R.string.edit_note)
+        if (note.favorite==0) {
+            popupMenu.menu.getItem(2).title = getString(R.string.edit_add_to_fav)
+        }else{
+            popupMenu.menu.getItem(2).title = getString(R.string.remove_to_fav)
+        }
+        popupMenu.menu.getItem(3).title = getString(R.string.lock_note)
+        popupMenu.menu.getItem(4).title = getString(R.string.delete_note)
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.pop_detail -> {
+                    startEditNotesActivity(view.tag as Int)
 
 
 
-                        return@setOnMenuItemClickListener true
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.pop_edit -> {
+                    startEditNotesActivity(view.tag as Int)
+
+                    return@setOnMenuItemClickListener true
+                }
+                R.id.pop_add_to_fav->{
+                    if (note.favorite==0) {
+
+                        addToFav(view.tag as Int)
+                    }else{
+                        removFromFav(view.tag as Int)
                     }
-                    R.id.pop_edit -> {
-                        startEditNotesActivity(v.tag as Int)
-
-                        return@setOnMenuItemClickListener true
-                    }
-
-                    R.id.pop_delete -> {
-                       DeleteNoteDialog(v)
-                        return@setOnMenuItemClickListener true
-                    }
-
+                    isAdded()
+                    NbNotes()
 
 
                 }
-                false
+                R.id.pop_lock_note->{
+
+                    toastMessage(this,getString(R.string.backup_note_msg))
+                }
+
+                R.id.pop_delete -> {
+                    DeleteNoteDialog(view)
+                    return@setOnMenuItemClickListener true
+                }
+
+
             }
-            popupMenu.show()
+            false
         }
+        popupMenu.show()
 
-
-
-return true
     }
 
 
@@ -862,7 +940,7 @@ return true
                 Createddate,
                 "#ffffff",
                 1,
-                0
+                0,0,0
             )
 
         }

@@ -14,7 +14,9 @@ class Note(
         var createdate: String? = "",
         var color: String? = "#ffdddd",
         var text_size: Int=1,
-        var isdeleted:Int?=null
+        var isdeleted:Int?=null,
+        var favorite:Int?=null,
+        var islocked:Int=0
 
 
 
@@ -28,7 +30,9 @@ class Note(
             parcel.readString(),
             parcel.readString(),
             parcel.readInt(),
-            parcel.readValue(Int::class.java.classLoader) as? Int) {
+            parcel.readValue(Int::class.java.classLoader) as? Int,
+            parcel.readValue(Int::class.java.classLoader) as? Int,
+            parcel.readInt()) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -41,6 +45,8 @@ class Note(
         parcel.writeString(color)
         parcel.writeInt(text_size)
         parcel.writeValue(isdeleted)
+        parcel.writeValue(favorite)
+        parcel.writeInt(islocked)
     }
 
     override fun describeContents(): Int {
@@ -54,11 +60,6 @@ class Note(
 
         override fun newArray(size: Int): Array<Note?> {
             return arrayOfNulls(size)
-        }
-
-        operator fun get(id: Int?): Int? {
-            return id
-
         }
     }
 }

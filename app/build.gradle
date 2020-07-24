@@ -14,8 +14,8 @@ android {
         applicationId "com.jkantech.jadonotes"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 13
-        versionName "1.2.11"
+        versionCode 14
+        versionName "1.2.12"
         multiDexEnabled true
         resConfigs "fr", "en","pt"
 

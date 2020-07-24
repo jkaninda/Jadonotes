@@ -1,7 +1,8 @@
-package com.jkantech.jadonotes.ui.adapters
+package com.jkantech .jadonotes.ui.adapters
 
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Movie
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -30,6 +32,9 @@ class NoteAdapter(private var notes: ArrayList<Note>, private val itemClickListe
         val excerptView = cardView.findViewById(R.id.excerpt) as TextView
         val date = cardView.findViewById(R.id.date) as TextView
         val noteCat = cardView.findViewById<TextView>(R.id.note_cat)
+        val notemore=itemView.findViewById<ImageView>(R.id.imgNoteMore)
+        val imgNoteFav=cardView.findViewById<ImageView>(R.id.imgNoteFav)
+        val note_locked=cardView.findViewById<ImageView>(R.id.note_locked)
         // val createdate = cardView.findViewById(R.id.create_date) as TextView
 
 
@@ -51,9 +56,21 @@ class NoteAdapter(private var notes: ArrayList<Note>, private val itemClickListe
         holder.cardView.setOnLongClickListener(longClickListener)
         holder.cardView.tag = position
         holder.titleView.text = note.title
-        holder.excerptView.text = note.text
         holder.date.text = note.editdate
+        holder.excerptView.text = note.text
+        if (note.islocked==1) {
+            holder.note_locked.setImageResource(R.drawable.ic_baseline_lock_24)
+        }
+
+        if (note.favorite==1){
+            holder.imgNoteFav.setImageResource(R.drawable.ic_baseline_star)
+        }else{
+            holder.imgNoteFav.setImageResource(R.drawable.ic_baseline_star_border_24)
+
+        }
         holder.noteCat.text = note.category
+        holder.notemore.setOnClickListener(itemClickListener)
+        holder.notemore.tag=position
         //Changer la couleur de note
         holder.cardView.setCardBackgroundColor(Color.parseColor(note.color))
 
